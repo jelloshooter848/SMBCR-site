@@ -1,0 +1,101 @@
+# Copy this file to the SMBC game repo as .github/ISSUE_TEMPLATE/bug_report.yml
+# (see docs/SETUP.md in the SMBCR-site repo). The site's "Report a bug" button opens it.
+name: Bug report
+description: Something in the game doesn't work the way it should.
+title: '[Bug] '
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping make SMBC REMIX better! Please search the [open issues](https://github.com/jelloshooter848/SMBC/issues) first; if your bug is already there, add a comment or a 👍 instead.
+        Not sure it's a bug? Ask in [Discussions](https://github.com/jelloshooter848/SMBC/discussions) first.
+  - type: input
+    id: version
+    attributes:
+      label: Build / version
+      description: The title screen shows it in the bottom-right corner, for example V0.5.0 (or V0.5.0-DEV.abc1234 on a test build).
+      placeholder: V0.5.0
+    validations:
+      required: true
+  - type: dropdown
+    id: hero
+    attributes:
+      label: Hero
+      description: Who were you playing as?
+      options:
+        - Mario
+        - Luigi
+        - Link
+        - Mega Man
+        - Samus
+        - Simon
+        - Ryu
+        - Bill
+        - Sophia III (or Jason on foot)
+        - Two players
+        - Not in a level (menus, map, editor)
+    validations:
+      required: true
+  - type: input
+    id: level
+    attributes:
+      label: Level
+      description: The level, or where you were if not in one (world map, a mini game, the level editor, a shared level...).
+      placeholder: 2-1, the sky palace
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: How were you playing?
+      options:
+        - A save file (the campaign)
+        - Classic play / level select
+        - A custom or shared level
+        - Mini Game Arena
+        - Other
+    validations:
+      required: false
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: What did you do, step by step? The more exact, the faster it gets fixed.
+      placeholder: |
+        1. Start 2-1 as Link
+        2. Climb the vine to the coin heaven
+        3. Down-thrust onto the last cloud
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: What happened instead?
+      description: Screenshots or a short video help a lot. Drag them into this box.
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      description: Include the controls you used (keyboard, gamepad, touch).
+      placeholder: Windows 11, Chrome 141, keyboard / iPhone 15, Safari, touch
+    validations:
+      required: true
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: How often does it happen?
+      options:
+        - Every time
+        - Sometimes
+        - Only once so far
+    validations:
+      required: false

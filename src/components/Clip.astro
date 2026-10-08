@@ -1,0 +1,73 @@
+---
+import { media } from '../lib';
+
+interface Props {
+  /** Media base name in public/media: <name>.webm, <name>.mp4 and <name>.png (the still). */
+  name: string;
+  /** Describes what the clip shows. */
+  label: string;
+}
+const { name, label } = Astro.props;
+---
+
+<figure class="screen clip" data-clip data-label={label}>
+  <video
+    muted
+    loop
+    playsinline
+    preload="none"
+    width="512"
+    height="480"
+    poster={media(`${name}.png`)}
+  >
+    <source src={media(`${name}.webm`)} type="video/webm" />
+    <source src={media(`${name}.mp4`)} type="video/mp4" />
+    <img src={media(`${name}.png`)} alt={label} width="512" height="480" loading="lazy" />
+  </video>
+  <button class="clip__toggle" type="button" hidden>Play clip</button>
+  <figcaption class="visually-hidden">{label}</figcaption>
+</figure>
+
+<script>
+  // Clips play only while on screen, never under prefers-reduced-motion unless asked, and
+  // always have a pause button (they loop).
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const clips = document.querySelectorAll<HTMLElement>('[data-clip]');
+  const io =
+    'IntersectionObserver' in window
+      ? new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              const v = e.target.querySelector('video');
+              if (!v || e.target.hasAttribute('data-paused-by-user')) continue;
+              if (e.isIntersecting && !reduce.matches) void v.play().catch(() => {});
+              else v.pause();
+            }
+          },
+          { rootMargin: '100px' },
+        )
+      : null;
+  for (const clip of clips) {
+    const v = clip.querySelector('video');
+    const b = clip.querySelector<HTMLButtonElement>('.clip__toggle');
+    if (!v || !b) continue;
+    b.hidden = false;
+    const sync = () => {
+      b.textContent = v.paused ? 'Play clip' : 'Pause';
+      b.setAttribute('aria-label', `${v.paused ? 'Play' : 'Pause'} clip: ${clip.dataset.label}`);
+    };
+    v.addEventListener('play', sync);
+    v.addEventListener('pause', sync);
+    sync();
+    b.addEventListener('click', () => {
+      if (v.paused) {
+        clip.removeAttribute('data-paused-by-user');
+        void v.play().catch(() => {});
+      } else {
+        clip.setAttribute('data-paused-by-user', '');
+        v.pause();
+      }
+    });
+    io?.observe(clip);
+  }
+</script>

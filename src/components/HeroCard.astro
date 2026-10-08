@@ -1,0 +1,33 @@
+---
+import type { Hero } from '../data/roster';
+import { worldByNumber } from '../data/roster';
+import { url, media } from '../lib';
+
+interface Props {
+  hero: Hero;
+}
+const { hero } = Astro.props;
+const world = worldByNumber(hero.world);
+---
+
+<article class="panel card hero-card" style={`--accent: ${hero.color}`}>
+  <div class="screen">
+    <img
+      src={media(`hero-${hero.id}.png`)}
+      alt={`${hero.name} in ${world?.title ?? `World ${hero.world}`}, from the game`}
+      width="512"
+      height="480"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  <h3><a href={url(`heroes/${hero.id}/`)}>{hero.name}</a></h3>
+  <p class="meta">Moves from <cite>{hero.from}</cite>. World {hero.world}: {world?.title}.</p>
+  <p>{hero.tagline}.</p>
+</article>
+
+<style>
+  .hero-card {
+    border-color: var(--accent, var(--panel-edge));
+  }
+</style>

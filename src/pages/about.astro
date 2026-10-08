@@ -1,0 +1,107 @@
+---
+import Base from '../layouts/Base.astro';
+import PageBanner from '../components/PageBanner.astro';
+import PixelArt from '../components/PixelArt.astro';
+import { GAME, SITE } from '../config';
+---
+
+<Base title="About and credits" description="About Super Mario Bros. Crossover: REMIX, a tribute to Jay Pavlina's original, with credits and the fan-project disclaimer.">
+  <PageBanner title="About and credits" intro="A love letter to a 2010 fan game, rebuilt for today's browsers." />
+  <div class="wrap prose-wide">
+    <section aria-labelledby="tribute">
+      <h2 id="tribute"><PixelArt name="star" scale={2} /> A tribute</h2>
+      <p class="lede">
+        In 2010 Jay Pavlina and Exploding Rabbit released <cite>Super Mario Bros. Crossover</cite>, a free Flash game that
+        let you play Super Mario Bros. as Mega Man, Link, Samus, Simon Belmont and other NES heroes, each with their own
+        moves. It was a brilliant idea, and beautifully made.
+      </p>
+      <p>
+        Flash is gone, and with it the easy way to play. <strong>{SITE.name}</strong> is a from-scratch remake for modern
+        browsers and phones that carries the idea forward: a story, a world map, a themed world and a mini game for every
+        hero, and a new hero, the tank Sophia III. It is a different project from the original, made with respect and
+        thanks. The level layouts come from the original game's open-source release (MIT licensed, no art or sound).
+      </p>
+      <p>
+        Go and see where it started: <a href="https://github.com/JayPavlina/super-mario-bros-crossover">the original
+        Super Mario Bros. Crossover source on GitHub</a>.
+      </p>
+    </section>
+
+    <section aria-labelledby="credits">
+      <h2 id="credits">Credits</h2>
+      <dl class="credits panel">
+        <dt>Original game</dt>
+        <dd><cite>Super Mario Bros. Crossover</cite> by Jay Pavlina, Exploding Rabbit (2010)</dd>
+        <dt>Remake</dt>
+        <dd>Made by jelloshooter848. Code, pixel art and chiptune music are original to the SMBC project.</dd>
+        <dt>This website</dt>
+        <dd>
+          Built with <a href="https://astro.build">Astro</a> and hosted on GitHub Pages.{' '}
+          Clips and screenshots are captured from the remake itself.{' '}
+          <a href={`https://github.com/${SITE.siteRepo}`}>Site source on GitHub</a>.
+        </dd>
+        <dt>Fonts</dt>
+        <dd>
+          Press Start 2P by CodeMan38 and Atkinson Hyperlegible by the Braille Institute, both under the SIL Open Font
+          License.
+        </dd>
+        <dt>Forum</dt>
+        <dd>GitHub Discussions, embedded with <a href="https://giscus.app">giscus</a>.</dd>
+      </dl>
+    </section>
+
+    <section aria-labelledby="original-art">
+      <h2 id="original-art">All-original art and music</h2>
+      <p>
+        The remake contains no Nintendo, Capcom, Konami or other third-party art, music or code. Every sprite and tile is
+        original pixel art drawn in an NES style, and all music is original chiptune synthesized in your browser.
+        Character and game names are used only to describe gameplay styles. The game's code and original assets are
+        released under the MIT license; see the <a href={GAME.repoUrl}>game repository</a>.
+      </p>
+    </section>
+
+    <section aria-labelledby="disclaimer" class="panel panel--gold">
+      <h2 id="disclaimer">Fan project disclaimer</h2>
+      <p>
+        {SITE.name} is a free, non-commercial fan project. It is <strong>not affiliated with or endorsed by</strong>{' '}
+        Nintendo, Capcom, Konami, Tecmo / Koei Tecmo, Sunsoft or Exploding Rabbit. Super Mario Bros., The Legend of Zelda,
+        Mega Man, Metroid, Castlevania, Ninja Gaiden, Contra, Blaster Master and all related characters and names are
+        trademarks of their respective owners. The remake's code and original art are by the SMBC project.
+      </p>
+      <p>Nothing here is for sale, and there are no ads. If a rights holder has a concern, please open an issue on the game's repository.</p>
+    </section>
+
+    <section aria-labelledby="privacy">
+      <h2 id="privacy">Privacy</h2>
+      <p>
+        This site sets no cookies and runs no analytics. Your browser asks GitHub for the latest release and, on pages with
+        comments, loads giscus from giscus.app. The game keeps its save files and settings in your own browser.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .prose-wide {
+    max-width: 52rem;
+    padding-top: 1rem;
+  }
+  .credits dt {
+    font-family: var(--font-pixel);
+    font-size: 0.65rem;
+    color: var(--gold);
+    margin-top: 1rem;
+  }
+  .credits dt:first-child {
+    margin-top: 0;
+  }
+  .credits dd {
+    margin: 0.35rem 0 0;
+  }
+  #disclaimer {
+    margin-top: 0;
+  }
+  section + section {
+    margin-top: 2.5rem;
+  }
+</style>

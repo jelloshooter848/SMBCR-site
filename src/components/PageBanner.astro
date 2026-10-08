@@ -1,0 +1,40 @@
+---
+import PixelArt from './PixelArt.astro';
+
+interface Props {
+  title: string;
+  intro?: string;
+}
+const { title, intro } = Astro.props;
+---
+
+<section class="sky page-banner-wrap" aria-labelledby="page-title">
+  <PixelArt name="cloud" scale={4} class="cloud cloud--a" />
+  <PixelArt name="cloud" scale={3} class="cloud cloud--b" />
+  <div class="wrap page-banner">
+    <h1 id="page-title">{title}</h1>
+    {intro && <p>{intro}</p>}
+    <slot />
+  </div>
+  <div class="ground" aria-hidden="true"></div>
+</section>
+
+<style>
+  .cloud--a {
+    top: 18px;
+    right: 8%;
+  }
+  .cloud--b {
+    top: 70px;
+    right: 38%;
+  }
+  @media (max-width: 640px) {
+    .cloud--b {
+      display: none;
+    }
+    .cloud--a {
+      right: -20px;
+      top: 8px;
+    }
+  }
+</style>

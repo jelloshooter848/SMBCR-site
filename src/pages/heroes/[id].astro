@@ -1,0 +1,193 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import Clip from '../../components/Clip.astro';
+import { HEROES, worldByNumber, KEYS, ABILITY, type Hero } from '../../data/roster';
+import { url, media } from '../../lib';
+
+export function getStaticPaths() {
+  return HEROES.map((hero) => ({ params: { id: hero.id }, props: { hero } }));
+}
+
+interface Props {
+  hero: Hero;
+}
+const { hero } = Astro.props;
+const world = worldByNumber(hero.world);
+const i = HEROES.indexOf(hero);
+const prev = HEROES[(i - 1 + HEROES.length) % HEROES.length] as Hero;
+const next = HEROES[(i + 1) % HEROES.length] as Hero;
+const itemName = { mushroom: 'Mushroom', flower: 'Fire flower', star: 'Star', drops: 'Enemy drops' };
+---
+
+<Base title={hero.name} description={`${hero.name} in Super Mario Bros. Crossover: REMIX: ${hero.tagline.toLowerCase()}. Moves, power-ups and tool belt.`} image={`hero-${hero.id}.png`}>
+  <PageBanner title={hero.name} intro={`${hero.tagline}. Moves from ${hero.from}.`} />
+  <div class="wrap">
+    <div class="hero-top">
+      <Clip name={`hero-${hero.id}`} label={`${hero.name} playing World ${hero.capture.level} in ${world?.title}.`} />
+      <div>
+        <p class="lede">{hero.blurb}</p>
+        <dl class="facts">
+          <dt>Home world</dt>
+          <dd><a href={url(`worlds/#world-${hero.world}`)}>World {hero.world}: {world?.title}</a> ({world?.style} style)</dd>
+          <dt>Where to find them</dt>
+          <dd>{hero.hiddenIn}</dd>
+          {
+            hero.miniGame && (
+              <>
+                <dt>Mini game</dt>
+                <dd>
+                  <strong>{hero.miniGame.name}.</strong> {hero.miniGame.blurb}
+                </dd>
+              </>
+            )
+          }
+          <dt>Stomp?</dt>
+          <dd>{hero.stomps ? 'Yes, the classic way.' : 'No. Fight with your own weapons instead.'}</dd>
+        </dl>
+      </div>
+    </div>
+
+    <section aria-labelledby="moves">
+      <h2 id="moves">Moves</h2>
+      <div class="table-wrap panel">
+        <table>
+          <caption class="visually-hidden">{hero.name}'s moves and their default keys</caption>
+          <thead>
+            <tr><th scope="col">Key</th><th scope="col">Ability</th><th scope="col">What it does</th></tr>
+          </thead>
+          <tbody>
+            {
+              hero.moves.map((m) => (
+                <tr>
+                  <td><kbd>{KEYS[m.action]}</kbd></td>
+                  <td>{ABILITY[m.action]}</td>
+                  <td>{m.does}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="powerups">
+      <h2 id="powerups">Power-ups</h2>
+      <p>The same items appear for everyone, but each hero gets something different from them.</p>
+      <ul class="grid items">
+        {
+          hero.powerups.map((p) => (
+            <li class="panel">
+              <h3>{itemName[p.item]}</h3>
+              <p>{p.does}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    {
+      hero.belt.length > 0 && (
+        <section aria-labelledby="belt">
+          <h2 id="belt">Tool belt</h2>
+          <p>
+            Press <kbd>Right Shift</kbd> (Tools) to pick a tool and <kbd>C</kbd> (Special) to use it.
+          </p>
+          <div class="table-wrap panel">
+            <table>
+              <caption class="visually-hidden">{hero.name}'s tool belt</caption>
+              <thead>
+                <tr><th scope="col">Tool</th><th scope="col">Cost</th><th scope="col">What it does</th></tr>
+              </thead>
+              <tbody>
+                {hero.belt.map((t) => (
+                  <tr>
+                    <td>{t.name}</td>
+                    <td>{t.cost ?? 'Free'}</td>
+                    <td>{t.does}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )
+    }
+
+    {
+      hero.tips.length > 0 && (
+        <section aria-labelledby="tips">
+          <h2 id="tips">Tips</h2>
+          <ul>
+            {hero.tips.map((t) => (
+              <li>{t}</li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <section aria-labelledby="world">
+      <h2 id="world">Home world: {world?.title}</h2>
+      <div class="world-row">
+        <div class="screen">
+          <img src={media(`map-${world?.page}.png`)} alt={`The World ${hero.world} map page, ${world?.title}.`} width="512" height="480" loading="lazy" />
+        </div>
+        <p>{world?.blurb}</p>
+      </div>
+    </section>
+
+    <nav class="pager" aria-label="More heroes">
+      <a class="btn btn--blue" href={url(`heroes/${prev.id}/`)}>◀ {prev.name}</a>
+      <a class="btn btn--blue" href={url('heroes/')}>All heroes</a>
+      <a class="btn btn--blue" href={url(`heroes/${next.id}/`)}>{next.name} ▶</a>
+    </nav>
+  </div>
+</Base>
+
+<style>
+  .hero-top {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+    gap: 2rem;
+    margin-top: 2.5rem;
+    align-items: start;
+  }
+  .facts dt {
+    font-family: var(--font-pixel);
+    font-size: 0.65rem;
+    color: var(--gold);
+    margin-top: 1rem;
+  }
+  .facts dd {
+    margin: 0.35rem 0 0;
+  }
+  .items {
+    list-style: none;
+    padding: 0;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  }
+  .items h3 {
+    margin: 0 0 0.5rem;
+    color: var(--gold);
+  }
+  .world-row {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .pager {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    margin-top: 3rem;
+  }
+  @media (max-width: 760px) {
+    .hero-top,
+    .world-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,7 @@
+# Optional: copy to the SMBC game repo as .github/ISSUE_TEMPLATE/config.yml. It points
+# questions to Discussions so the issue tracker stays for bugs.
+blank_issues_enabled: true
+contact_links:
+  - name: Questions, ideas and chat
+    url: https://github.com/jelloshooter848/SMBC/discussions
+    about: Ask and talk about the game in GitHub Discussions.

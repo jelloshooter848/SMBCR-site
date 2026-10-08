@@ -1,0 +1,103 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import HeroCard from '../../components/HeroCard.astro';
+import { HEROES, CHAPTERS } from '../../data/roster';
+import { media } from '../../lib';
+
+const chapters = CHAPTERS.map((c) => ({ ...c, heroes: HEROES.filter((h) => h.chapter === c.number) }));
+---
+
+<Base title="Heroes" description="Every hero in Super Mario Bros. Crossover: REMIX, their moves, power-ups and tool belts, and the world themed after them.">
+  <PageBanner
+    title="Heroes"
+    intro="Bowser's spell pulled heroes from eight other worlds into the Mushroom Kingdom. Each plays Super Mario Bros. with the moves of their own game."
+  />
+  <div class="wrap">
+    <figure class="select">
+      <div class="screen">
+        <img
+          src={media('hero-select.png')}
+          alt="The hero select screen: Mario, Luigi, Link, Mega Man, Samus, Simon, Ryu, Bill and the tank Sophia III in a row."
+          width="512"
+          height="480"
+        />
+      </div>
+      <figcaption>
+        A new save file starts with Mario only. The others show as silhouettes until you free them. Outside the campaign
+        (custom levels, shared links, level select) every hero is playable from the start.
+      </figcaption>
+    </figure>
+
+    {
+      chapters.map((c) =>
+        c.heroes.length ? (
+          <section aria-labelledby={`chapter-${c.number}`}>
+            <h2 id={`chapter-${c.number}`}>
+              Chapter {c.number}: {c.name}
+            </h2>
+            <div class="grid">
+              {c.heroes.map((h) => (
+                <HeroCard hero={h} />
+              ))}
+            </div>
+          </section>
+        ) : (
+          <section aria-labelledby={`chapter-${c.number}`} class="panel later">
+            <h2 id={`chapter-${c.number}`}>
+              Chapter {c.number}: {c.name}
+            </h2>
+            <p>{c.blurb}</p>
+            <p>New heroes join here when the chapter ships.</p>
+          </section>
+        ),
+      )
+    }
+
+    <section aria-labelledby="controls-title">
+      <h2 id="controls-title">Default controls</h2>
+      <p>
+        Every hero uses the same buttons; what they do changes. Remap anything in <strong>Options → Controls</strong>.
+        Gamepads use the standard layout, and touch controls appear on phones and tablets, labelled with what each
+        button does for your hero right now.
+      </p>
+      <div class="table-wrap panel">
+        <table>
+          <caption class="visually-hidden">Default keyboard controls</caption>
+          <thead>
+            <tr><th scope="col">Key</th><th scope="col">Ability</th><th scope="col">In menus</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><kbd>←</kbd> <kbd>→</kbd> <kbd>↑</kbd> <kbd>↓</kbd></td><td>Move, aim, crouch, climb</td><td>Move the cursor</td></tr>
+            <tr><td><kbd>Z</kbd></td><td>Jump</td><td>OK</td></tr>
+            <tr><td><kbd>X</kbd></td><td>Attack (Mario and Luigi: run)</td><td>Back</td></tr>
+            <tr><td><kbd>C</kbd></td><td>Special: use the selected tool</td><td></td></tr>
+            <tr><td><kbd>Right Shift</kbd></td><td>Tools: cycle the tool belt</td><td></td></tr>
+            <tr><td><kbd>Enter</kbd></td><td>Pause and menu</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .select {
+    margin: 2.5rem 0 0;
+    display: grid;
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .select figcaption {
+    font-size: 1.15rem;
+  }
+  .later {
+    margin-top: 3rem;
+  }
+  @media (max-width: 700px) {
+    .select {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

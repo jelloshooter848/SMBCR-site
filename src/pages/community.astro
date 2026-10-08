@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+import PageBanner from '../components/PageBanner.astro';
+import Giscus from '../components/Giscus.astro';
+import { COMMUNITY, GAME } from '../config';
+---
+
+<Base title="Community" description="Chat about Super Mario Bros. Crossover: REMIX, share levels and report bugs.">
+  <PageBanner
+    title="Community"
+    intro="The forum is GitHub Discussions: free, no ads, and you can read everything without an account. Posting needs a free GitHub account."
+  />
+  <div class="wrap">
+    <div class="grid ways">
+      <section class="panel" aria-labelledby="forum-title">
+        <h2 id="forum-title">The forum</h2>
+        <p>Ask for help, share strategies, suggest ideas, or show off a level you built.</p>
+        <p class="btn-row"><a class="btn" href={COMMUNITY.discussionsUrl}>Open the forum</a></p>
+      </section>
+      <section class="panel" aria-labelledby="share-title">
+        <h2 id="share-title">Share a level</h2>
+        <p>
+          In the game: <strong>Level editor → Copy share link</strong>. The link holds the whole level, so paste it in a
+          post and anyone can play it in one click.
+        </p>
+      </section>
+      <section class="panel" aria-labelledby="be-nice-title">
+        <h2 id="be-nice-title">House rules</h2>
+        <ul>
+          <li>Be kind. Everyone was new once.</li>
+          <li>No ROMs, ripped assets or piracy links.</li>
+          <li>Mark spoilers for mini games and secrets.</li>
+        </ul>
+      </section>
+    </div>
+
+    <Giscus title="Say hi" />
+
+    <section id="bugs" class="bugs" aria-labelledby="bugs-title">
+      <h2 id="bugs-title">Report a bug</h2>
+      <p>
+        Bug reports go to the game's <a href={COMMUNITY.issuesUrl}>issue tracker</a>, where the developer works through
+        them. The form asks for everything needed to reproduce the bug, so please fill in every field.
+      </p>
+      <ol class="steps">
+        <li>
+          <strong>Check it hasn't been reported:</strong> search the <a href={COMMUNITY.issuesUrl}>open issues</a> first. If it
+          has, add a comment or a 👍 to the existing one.
+        </li>
+        <li>
+          <strong>Note the version:</strong> the title screen shows it in the bottom corner, for example{' '}
+          <code>V{GAME.launchVersion}</code>.
+        </li>
+        <li>
+          <strong>Write down</strong> the hero, the level (such as 2-1, or "world map"), what you did, what you expected
+          and what happened, and your device and browser.
+        </li>
+        <li><strong>Screenshots or a short video help a lot.</strong> You can drag them into the form.</li>
+      </ol>
+      <p class="btn-row">
+        <a class="btn btn--red" href={COMMUNITY.bugReportUrl}>Open the bug report form</a>
+      </p>
+      <p class="meta">Needs a free GitHub account. Not sure it's a bug? Ask on the forum first.</p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .ways {
+    margin-top: 2.5rem;
+  }
+  .ways h2 {
+    margin-top: 0;
+  }
+  .bugs {
+    margin-top: 3rem;
+    scroll-margin-top: 1rem;
+  }
+  .steps li {
+    margin-bottom: 0.6rem;
+  }
+  .meta {
+    color: var(--muted);
+  }
+</style>

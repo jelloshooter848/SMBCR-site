@@ -1,0 +1,159 @@
+---
+import Base from '../layouts/Base.astro';
+import PageBanner from '../components/PageBanner.astro';
+import PixelArt from '../components/PixelArt.astro';
+import { WORLDS, CHAPTERS, heroById } from '../data/roster';
+import { url, media } from '../lib';
+
+const lostKingdom = CHAPTERS.find((c) => c.number === 2);
+---
+
+<Base title="Worlds" description="The eight worlds of Super Mario Bros. Crossover: REMIX Chapter 1, each themed after the hero waiting there.">
+  <PageBanner
+    title="Worlds"
+    intro="Every world keeps its Super Mario Bros. levels, then dresses them as a captured hero's homeland, with new tiles, decor and music. (Classic mode keeps the original looks.)"
+  />
+  <div class="wrap">
+    <section aria-labelledby="story-title" class="story">
+      <h2 id="story-title">The story so far</h2>
+      <p class="lede">
+        Princess Peach is missing. She left Toad a note: Bowser is up to something, and this time she has gone to find
+        help herself, somewhere no Koopa would ever look. Bowser, holding a star wand stolen from his own son, casts a
+        spell that pulls eight heroes from other worlds into the Mushroom Kingdom and brainwashes them to hunt for her.
+      </p>
+      <p>
+        Each hero brought a piece of their homeland. The road out of every world stays sealed until its castle is
+        cleared <em>and</em> its hero is freed, and every broken seal makes the wand misfire a little worse in Bowser's
+        hands.
+      </p>
+    </section>
+
+    <ol class="worlds">
+      {
+        WORLDS.map((w) => {
+          const hero = heroById(w.hero);
+          return (
+            <li class="panel world" id={`world-${w.number}`}>
+              <div class="screen">
+                <img
+                  src={media(`map-${w.page}.png`)}
+                  alt={`The World ${w.number} map page, ${w.title}.`}
+                  width="512"
+                  height="480"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div>
+                <p class="tag">World {w.number}</p>
+                <h2>{w.title}</h2>
+                <p>{w.blurb}</p>
+                <p>
+                  <strong>Style:</strong> {w.style}. <strong>Hero to free:</strong>{' '}
+                  <a href={url(`heroes/${w.hero}/`)}>{hero?.name}</a>
+                  {hero?.miniGame && <>, in the mini game {hero.miniGame.name}</>}.
+                </p>
+                <ul class="levels">
+                  {w.levels.map((l) => (
+                    <li>
+                      <strong>{l.id}</strong> {l.look}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </li>
+          );
+        })
+      }
+    </ol>
+
+    {
+      lostKingdom && (
+        <section class="panel panel--gold chapter2" aria-labelledby="chapter-2">
+          <PixelArt name="rift" scale={5} />
+          <div>
+            <h2 id="chapter-2">
+              Coming later: Chapter {lostKingdom.number}, {lostKingdom.name}
+            </h2>
+            <p>{lostKingdom.blurb}</p>
+          </div>
+        </section>
+      )
+    }
+
+    <section aria-labelledby="extras-title">
+      <h2 id="extras-title">Off the main road</h2>
+      <ul class="grid extras">
+        <li class="panel">
+          <h3>Warp zones and secrets</h3>
+          <p>Warp pipes open only the world they lead to. Secret exits open their own roads on the map.</p>
+        </li>
+        <li class="panel">
+          <h3>Bonus games and items</h3>
+          <p>SMB3-style bonus games fill an item inventory you can use from the map before a level.</p>
+        </li>
+        <li class="panel">
+          <h3>Hero training</h3>
+          <p>Mario's tutorial is stage 1-0. Every other hero has an optional practice room the first time you pick them.</p>
+        </li>
+        <li class="panel">
+          <h3>The Lost Levels</h3>
+          <p>All 13 Lost Levels worlds, 52 levels, are in the game too, playable from level select in classic mode.</p>
+        </li>
+      </ul>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .story {
+    margin-top: 2.5rem;
+  }
+  .worlds {
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0 0;
+    display: grid;
+    gap: 2rem;
+  }
+  .world {
+    display: grid;
+    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+    gap: 1.75rem;
+    align-items: start;
+    scroll-margin-top: 1rem;
+  }
+  .world h2 {
+    margin: 0.5rem 0 0.75rem;
+  }
+  .levels {
+    padding-left: 1.2rem;
+    margin: 0;
+  }
+  .chapter2 {
+    margin-top: 3rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .chapter2 h2 {
+    margin-top: 0;
+  }
+  .extras {
+    list-style: none;
+    padding: 0;
+  }
+  .extras h3 {
+    margin-top: 0;
+    color: var(--gold);
+  }
+  @media (max-width: 760px) {
+    .world {
+      grid-template-columns: 1fr;
+    }
+    .chapter2 {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
