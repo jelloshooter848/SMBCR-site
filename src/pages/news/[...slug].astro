@@ -1,0 +1,44 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import Giscus from '../../components/Giscus.astro';
+import { url } from '../../lib';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('news', (p) => !p.data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+interface Props {
+  post: CollectionEntry<'news'>;
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+const date = post.data.date;
+const fmt = date.toLocaleDateString('en', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+
+<Base title={post.data.title} description={post.data.summary} image={post.data.image}>
+  <PageBanner title={post.data.title}>
+    <p class="post-date"><time datetime={date.toISOString().slice(0, 10)}>{fmt}</time></p>
+  </PageBanner>
+  <div class="wrap">
+    <article class="prose">
+      <Content />
+    </article>
+    <p><a href={url('news/')}>◀ All news</a></p>
+    <Giscus />
+  </div>
+</Base>
+
+<style>
+  .prose {
+    margin-top: 2.5rem;
+  }
+  .post-date {
+    margin-top: 0.75rem !important;
+    font-family: var(--font-pixel);
+    font-size: 0.7rem !important;
+  }
+</style>

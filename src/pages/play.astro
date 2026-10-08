@@ -1,0 +1,165 @@
+---
+import Base from '../layouts/Base.astro';
+import LatestRelease from '../components/LatestRelease.astro';
+import { GAME } from '../config';
+import { media, url } from '../lib';
+---
+
+<Base title="Play" description="Play Super Mario Bros. Crossover: REMIX right here in your browser, or full screen.">
+  <div class="wrap play">
+    <h1>Play</h1>
+    <p class="lede">
+      Free, no install. The game saves to your browser, and the version here and the full-screen one share the same save
+      files.
+    </p>
+
+    <div class="player" data-player data-src={GAME.playUrl}>
+      <div class="player__start" data-player-start>
+        <img src={media('title.png')} alt="" width="512" height="480" />
+        <button class="btn btn--red btn--play" type="button" data-player-button hidden>▶ Start the game here</button>
+        <noscript>
+          <a class="btn btn--red btn--play" href={GAME.playUrl}>▶ Play full screen</a>
+        </noscript>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <a class="btn" href={GAME.playUrl}>Play full screen</a>
+      <button class="btn btn--blue" type="button" data-player-fullscreen hidden>Fill the screen</button>
+    </div>
+    <p class="notice" data-player-status aria-live="polite" hidden></p>
+
+    <section aria-labelledby="tips-title" class="tips">
+      <h2 id="tips-title">Before you start</h2>
+      <ul>
+        <li>
+          <strong>The game takes the keyboard</strong> as soon as it starts. If keys don't respond, click it once. Click
+          outside it to get back to the page.
+        </li>
+        <li>
+          <strong>Keyboard:</strong> arrows move, <kbd>Z</kbd> jumps (OK in menus), <kbd>X</kbd> attacks or runs (back in
+          menus), <kbd>C</kbd> uses your tool, <kbd>Right Shift</kbd> picks a tool, <kbd>Enter</kbd> pauses.{' '}
+          <a href={url('heroes/')}>Every hero's moves</a>.
+        </li>
+        <li><strong>Gamepad:</strong> plug it in and press a button. Standard layout.</li>
+        <li>
+          <strong>Phone or tablet:</strong> touch controls appear on their own. Full screen is roomier, so the{' '}
+          <em>Play full screen</em> button is the better pick on a small screen.
+        </li>
+        <li>
+          <strong>Accessibility:</strong> Options on the title screen lets you remap keys, reduce flashing, pick a
+          colour-blind palette and turn on screen-reader announcements.
+        </li>
+      </ul>
+    </section>
+
+    <LatestRelease />
+  </div>
+</Base>
+
+<style>
+  .play h1 {
+    margin-top: 2rem;
+  }
+  .player {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    aspect-ratio: 16 / 13;
+    background: var(--black);
+    border: var(--px) solid var(--black);
+    box-shadow:
+      0 0 0 var(--px) var(--panel-edge),
+      8px 8px 0 var(--px) var(--black);
+    margin: 1.5rem var(--px);
+  }
+  .player :global(iframe),
+  .player__start {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .player__start {
+    display: grid;
+    place-items: center;
+  }
+  .player__start img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0.45;
+  }
+  .player__start .btn,
+  .player__start noscript {
+    position: relative;
+  }
+  .tips {
+    max-width: 52rem;
+  }
+  .tips li {
+    margin-bottom: 0.6rem;
+  }
+  @media (max-width: 700px) {
+    /* Room for the touch pad under the picture. */
+    .player {
+      aspect-ratio: 3 / 4;
+    }
+  }
+</style>
+
+<script>
+  // Loads the game into the page only when asked (it is a few MB), then hands it the keyboard.
+  // Same origin as this site on GitHub Pages, so saves and settings are shared with full screen.
+  const player = document.querySelector<HTMLElement>('[data-player]');
+  const start = player?.querySelector<HTMLElement>('[data-player-start]');
+  const button = player?.querySelector<HTMLButtonElement>('[data-player-button]');
+  const fill = document.querySelector<HTMLButtonElement>('[data-player-fullscreen]');
+  const status = document.querySelector<HTMLElement>('[data-player-status]');
+
+  const say = (html: string) => {
+    if (!status) return;
+    status.innerHTML = html;
+    status.hidden = false;
+  };
+
+  if (player && start && button) {
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      const src = player.dataset.src as string;
+      const frame = document.createElement('iframe');
+      frame.src = src;
+      frame.title = 'Super Mario Bros. Crossover: REMIX, the game';
+      // Autoplay lets the click that started it count for sound; gamepad and fullscreen as named.
+      frame.allow = 'autoplay; fullscreen; gamepad';
+      frame.setAttribute('allowfullscreen', '');
+      let loaded = false;
+      frame.addEventListener('load', () => {
+        loaded = true;
+        frame.focus();
+        try {
+          frame.contentWindow?.focus();
+        } catch {
+          /* cross-origin: the player's first click focuses it */
+        }
+      });
+      start.replaceWith(frame);
+      frame.focus();
+      say("Game loading… If keys don't respond once it's up, click it once.");
+      window.setTimeout(() => {
+        if (!loaded)
+          say(
+            `The game is taking a while to load here. <a href="${src}">Open it full screen</a> instead.`,
+          );
+        else if (status) status.hidden = true;
+      }, 15000);
+      if (fill && player.requestFullscreen) {
+        fill.hidden = false;
+        fill.addEventListener('click', () => void player.requestFullscreen().catch(() => {}));
+      }
+    });
+  }
+</script>

@@ -1,0 +1,211 @@
+---
+import Base from '../layouts/Base.astro';
+import PixelArt from '../components/PixelArt.astro';
+import Clip from '../components/Clip.astro';
+import HeroCard from '../components/HeroCard.astro';
+import LatestRelease from '../components/LatestRelease.astro';
+import { HEROES, WORLDS } from '../data/roster';
+import { GAME } from '../config';
+import { url, media } from '../lib';
+
+const chapterHeroes = HEROES.filter((h) => h.chapter === 1);
+const features = [
+  {
+    icon: 'star',
+    title: 'Nine heroes, nine move sets',
+    text: 'Mario and Luigi, Link, Mega Man, Samus, Simon, Ryu, Bill and Sophia III each play the levels their own way: swords, whips, arm cannons, wall climbs and a tank.',
+  },
+  {
+    icon: 'qblock',
+    title: 'Every world is a homeland',
+    text: 'World 2 is Hyrule, World 3 Mega City, World 4 Planet Zebes, and on to Bowser’s Underworld. Same levels, new looks and new music.',
+  },
+  {
+    icon: 'heart',
+    title: 'Free the heroes',
+    text: 'Bowser brainwashed them with a stolen star wand. Find each one in their world and win a mini game in the style of their own game.',
+  },
+  {
+    icon: 'coin',
+    title: 'A world map and save files',
+    text: 'Three save files, a map with roads and warp pipes, SMB3-style items and bonus games, and an optional training room for every hero.',
+  },
+  {
+    icon: 'cloud',
+    title: 'Build and share levels',
+    text: 'The level editor saves in your browser. Copy a share link and anyone who opens it plays your level straight away. Nothing is uploaded.',
+  },
+  {
+    icon: 'star',
+    title: 'Plays everywhere, for everyone',
+    text: 'Keyboard, gamepad or touch. Remap every key, reduce flashing, pick a colour-blind palette or turn on screen-reader announcements.',
+  },
+] as const;
+---
+
+<Base>
+  <div class="sky home-hero">
+    <PixelArt name="cloud" scale={5} class="cloud c1" />
+    <PixelArt name="cloud" scale={3} class="cloud c2" />
+    <div class="wrap home-hero__inner">
+      <div class="home-hero__text">
+        <h1 id="home-title" class="logo">
+          <img
+            src={media('logo.png')}
+            alt="Super Mario Bros. Crossover: REMIX, Chapter 1"
+            width="470"
+            height="180"
+            fetchpriority="high"
+          />
+        </h1>
+        <p class="home-hero__pitch">
+          Play Super Mario Bros. as the heroes of other NES classics, right in your browser. Free, no install, no
+          account.
+        </p>
+        <div class="btn-row">
+          <a class="btn btn--red btn--play" href={url('play/')}>▶ Play</a>
+          <a class="btn" href={GAME.playUrl}>Play full screen</a>
+        </div>
+      </div>
+      <div class="home-hero__screen">
+        <Clip name="hero-mario" label="Mario runs through World 1-1 while the brainwashed Luigi runs off ahead of him." />
+        <PixelArt name="qblock" scale={4} class="bob qb" />
+      </div>
+    </div>
+    <div class="ground" aria-hidden="true"></div>
+  </div>
+
+  <div class="wrap">
+    <section aria-labelledby="pitch-title" class="pitch">
+      <h2 id="pitch-title">A fan remake of a fan classic</h2>
+      <p class="lede">
+        In 2010, Jay Pavlina's Flash game <cite>Super Mario Bros. Crossover</cite> let you run through Super Mario
+        Bros. as Link, Mega Man, Samus and friends. Flash is gone, so <strong>REMIX</strong> rebuilds the idea from scratch
+        for modern browsers and phones, with all-new NES-style pixel art and chiptune music, a story, a world map, and
+        all eight worlds plus the Lost Levels.
+      </p>
+      <div class="pitch__clips">
+        <Clip name="hero-link" label="Link walks through World 2-1, a Zelda II-style field, swinging his sword." />
+        <Clip name="hero-samus" label="Samus runs and jumps through World 4-1 on Planet Zebes, firing her arm cannon." />
+        <Clip name="hero-sophia" label="The tank Sophia III drives through World 8-1, the Underworld's forest, firing its cannon." />
+      </div>
+    </section>
+
+    <section aria-labelledby="features-title">
+      <h2 id="features-title">What's inside</h2>
+      <ul class="grid features">
+        {
+          features.map((f) => (
+            <li class="panel feature">
+              <PixelArt name={f.icon} scale={3} />
+              <h3>{f.title}</h3>
+              <p>{f.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="heroes-title">
+      <h2 id="heroes-title">Pick your hero</h2>
+      <p>
+        {chapterHeroes.length} heroes in {GAME.chapter}, across {WORLDS.filter((w) => w.chapter === 1).length} worlds.{' '}
+        <a href={url('heroes/')}>See every hero's moves</a>.
+      </p>
+      <div class="grid">
+        {chapterHeroes.map((h) => <HeroCard hero={h} />)}
+      </div>
+    </section>
+
+    <section class="home-release">
+      <LatestRelease />
+    </section>
+
+    <section aria-labelledby="join-title" class="panel join">
+      <h2 id="join-title">Join in</h2>
+      <p>
+        Talk about the game, share your levels and ask questions on the forum. Found a bug? Report it with the bug form and
+        it goes straight to the developer.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn--blue" href={url('community/')}>Community</a>
+        <a class="btn btn--blue" href={url('community/#bugs')}>Report a bug</a>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .home-hero {
+    padding-top: 2rem;
+  }
+  .home-hero .c1 {
+    top: 24px;
+    left: 4%;
+  }
+  .home-hero .c2 {
+    top: 120px;
+    left: 46%;
+  }
+  .home-hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 2rem;
+    align-items: center;
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
+  }
+  .logo {
+    margin: 0 0 1rem;
+    text-shadow: none;
+  }
+  .logo img {
+    width: 100%;
+    max-width: 470px;
+  }
+  .home-hero__pitch {
+    font-size: 1.25rem;
+    font-weight: 700;
+    max-width: 32rem;
+  }
+  .home-hero__screen {
+    position: relative;
+  }
+  .home-hero__screen .qb {
+    position: absolute;
+    top: -40px;
+    right: -12px;
+  }
+  .pitch__clips {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+  .features {
+    list-style: none;
+    padding: 0;
+  }
+  .feature h3 {
+    margin: 0.75rem 0 0.5rem;
+    color: var(--gold);
+  }
+  .home-release {
+    margin-top: 3rem;
+  }
+  .join {
+    margin-top: 3rem;
+  }
+  @media (max-width: 760px) {
+    .home-hero__inner {
+      grid-template-columns: 1fr;
+    }
+    .pitch__clips {
+      grid-template-columns: 1fr;
+    }
+    .home-hero__screen .qb {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import { GAME } from '../../config';
+import { url } from '../../lib';
+
+const posts = (await getCollection('news', (p) => !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+const fmt = (d: Date) => d.toLocaleDateString('en', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+---
+
+<Base title="News and changelog" description="News about Super Mario Bros. Crossover: REMIX and the release notes of every version.">
+  <PageBanner title="News" intro="Announcements from the team, and the release notes of every version of the game." />
+  <div class="wrap">
+    <section aria-labelledby="posts-title">
+      <h2 id="posts-title">Posts</h2>
+      <ul class="posts">
+        {
+          posts.map((p) => (
+            <li class="panel">
+              <p class="tag">
+                <time datetime={p.data.date.toISOString().slice(0, 10)}>{fmt(p.data.date)}</time>
+              </p>
+              <h3>
+                <a href={url(`news/${p.id}/`)}>{p.data.title}</a>
+              </h3>
+              <p>{p.data.summary}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section aria-labelledby="releases-title" data-releases data-api={GAME.releasesApi}>
+      <h2 id="releases-title">Release notes</h2>
+      <p>
+        Straight from the game's <a href={GAME.releasesUrl}>GitHub Releases</a>. Each release has an{' '}
+        <code>smbc-vX.Y.Z.zip</code> for offline play.
+      </p>
+      <p class="notice" data-releases-status aria-live="polite">
+        Loading the latest releases… If nothing appears, read them on <a href={GAME.releasesUrl}>GitHub</a>.
+      </p>
+      <div class="releases" data-releases-list></div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .posts {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .posts h3 {
+    margin: 0.75rem 0 0.5rem;
+  }
+  .posts h3 a {
+    color: var(--ink);
+  }
+  .posts h3 a:hover {
+    color: var(--gold);
+  }
+  .posts p {
+    margin: 0;
+  }
+  .releases {
+    display: grid;
+    gap: 1.5rem;
+  }
+  .releases :global(article h3) {
+    margin-top: 0;
+  }
+  .releases :global(article h4) {
+    color: var(--gold);
+  }
+  .releases :global(.release__meta) {
+    color: var(--muted);
+  }
+</style>
+
+<script>
+  import { releases, zipAsset, formatDate, formatSize, renderNotes } from '../../scripts/releases';
+
+  const root = document.querySelector<HTMLElement>('[data-releases]');
+  const status = root?.querySelector<HTMLElement>('[data-releases-status]');
+  const list = root?.querySelector<HTMLElement>('[data-releases-list]');
+  const esc = (s: string) => s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c] as string);
+
+  if (root && status && list) {
+    releases(root.dataset.api as string, 10)
+      .then((all) => {
+        const shown = all.filter((r) => !r.draft);
+        if (!shown.length) {
+          status.textContent = 'No releases yet.';
+          return;
+        }
+        status.hidden = true;
+        list.innerHTML = shown
+          .map((r) => {
+            const zip = zipAsset(r);
+            const title = esc(r.name || r.tag_name);
+            return `<article class="panel">
+              <h3><a href="${esc(r.html_url)}">${title}</a>${r.prerelease ? ' <span class="tag">Pre-release</span>' : ''}</h3>
+              <p class="release__meta">Released <time datetime="${esc(r.published_at)}">${esc(formatDate(r.published_at))}</time>${
+                zip
+                  ? ` · <a href="${esc(zip.browser_download_url)}" download>Download ${esc(zip.name)} (${formatSize(zip.size)})</a>`
+                  : ''
+              }</p>
+              ${renderNotes(r.body ?? '', 4)}
+            </article>`;
+          })
+          .join('');
+      })
+      .catch(() => {
+        status.innerHTML = `Couldn't load the releases right now. Read them on <a href="${esc(
+          (root.querySelector('a') as HTMLAnchorElement).href,
+        )}">GitHub</a>.`;
+      });
+  }
+</script>

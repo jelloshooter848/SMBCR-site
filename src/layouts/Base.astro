@@ -1,0 +1,123 @@
+---
+import '@fontsource/press-start-2p/400.css';
+import '@fontsource/atkinson-hyperlegible/400.css';
+import '@fontsource/atkinson-hyperlegible/700.css';
+import '../styles/global.css';
+import { SITE, GAME } from '../config';
+import { url, media } from '../lib';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** An image in public/media for link previews. */
+  image?: string;
+}
+
+const { title, description = SITE.description, image = 'title.png' } = Astro.props;
+const fullTitle = title ? `${title} | ${SITE.shortName}` : `${SITE.name}: play it free in your browser`;
+const path = Astro.url.pathname;
+const canonical = new URL(path, Astro.site).href;
+const ogImage = new URL(media(image), Astro.site).href;
+
+const nav = [
+  { href: url(''), label: 'Home' },
+  { href: url('heroes/'), label: 'Heroes' },
+  { href: url('worlds/'), label: 'Worlds' },
+  { href: url('news/'), label: 'News' },
+  { href: url('community/'), label: 'Community' },
+  { href: url('about/'), label: 'About' },
+];
+const isCurrent = (href: string) => (href === url('') ? path === href : path.startsWith(href));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+    <meta name="theme-color" content="#000000" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href={url('')}>
+          <span class="brand__smb">SMB</span>
+          <span>CROSSOVER</span>
+          <span class="brand__remix">REMIX</span>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+          Menu
+        </button>
+        <nav class="site-nav" id="site-nav" aria-label="Main">
+          <ul>
+            {
+              nav.map((n) => (
+                <li>
+                  <a href={n.href} aria-current={isCurrent(n.href) ? 'page' : undefined}>
+                    {n.label}
+                  </a>
+                </li>
+              ))
+            }
+            <li>
+              <a class="nav-play" href={url('play/')} aria-current={path.startsWith(url('play/')) ? 'page' : undefined}>
+                ▶ Play
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="ground" aria-hidden="true"></div>
+      <div class="wrap">
+        <nav aria-label="Footer">
+          <ul>
+            <li><a href={url('play/')}>Play</a></li>
+            <li><a href={GAME.releasesUrl}>Releases</a></li>
+            <li><a href={url('community/')}>Community and bug reports</a></li>
+            <li><a href={url('about/')}>About and credits</a></li>
+            <li><a href={GAME.repoUrl}>Game source on GitHub</a></li>
+          </ul>
+        </nav>
+        <p>
+          {SITE.name} is a free, non-commercial fan project based on <cite>Super Mario Bros. Crossover</cite> by
+          Jay Pavlina (Exploding Rabbit, 2010). It is not affiliated with or endorsed by Nintendo, Capcom, Konami, Tecmo
+          / Koei Tecmo, Sunsoft or Exploding Rabbit. All characters belong to their owners. The remake's code and
+          original art are by the SMBC project. <a href={url('about/')}>Full credits</a>.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const toggle = document.querySelector<HTMLButtonElement>('.nav-toggle');
+      const nav = document.getElementById('site-nav');
+      toggle?.addEventListener('click', () => {
+        const open = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(open));
+        nav?.classList.toggle('is-open', open);
+      });
+    </script>
+  </body>
+</html>

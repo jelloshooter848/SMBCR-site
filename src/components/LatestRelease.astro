@@ -1,0 +1,73 @@
+---
+import { GAME } from '../config';
+import { url } from '../lib';
+
+interface Props {
+  headingLevel?: 2 | 3;
+}
+const { headingLevel = 2 } = Astro.props;
+const H = `h${headingLevel}`;
+---
+
+<section class="panel panel--gold release" data-latest-release data-api={GAME.releasesApi} aria-labelledby="latest-release-title">
+  <H id="latest-release-title">Latest release</H>
+  <p class="release__line">
+    <strong data-r="version">{GAME.chapter} · v{GAME.launchVersion}</strong>
+    <span data-r="date"></span>
+  </p>
+  <p>Play online any time, or download the zip to play offline: unzip it and open <code>index.html</code>.</p>
+  <div class="btn-row">
+    <a class="btn btn--red" href={url('play/')}>▶ Play now</a>
+    <a class="btn" data-r="download" href={GAME.latestReleaseUrl}>Download zip</a>
+    <a data-r="notes" href={url('news/')}>What's new</a>
+  </div>
+  <p class="meta" data-r="status" aria-live="polite"></p>
+</section>
+
+<style>
+  .release__line {
+    font-size: 1.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+  }
+  .meta {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+  .meta:empty {
+    display: none;
+  }
+</style>
+
+<script>
+  import { latestRelease, zipAsset, formatSize, formatDate } from '../scripts/releases';
+
+  for (const box of document.querySelectorAll<HTMLElement>('[data-latest-release]')) {
+    const $ = (k: string) => box.querySelector<HTMLElement>(`[data-r="${k}"]`);
+    latestRelease(box.dataset.api as string)
+      .then((r) => {
+        const version = $('version');
+        if (version) version.textContent = r.name || r.tag_name;
+        const date = $('date');
+        if (date) date.textContent = `Released ${formatDate(r.published_at)}`;
+        const zip = zipAsset(r);
+        const dl = $('download') as HTMLAnchorElement | null;
+        if (dl && zip) {
+          dl.href = zip.browser_download_url;
+          dl.textContent = `Download ${zip.name} (${formatSize(zip.size)})`;
+          dl.setAttribute('download', '');
+        }
+        const notes = $('notes') as HTMLAnchorElement | null;
+        if (notes) {
+          notes.href = r.html_url;
+          notes.textContent = `${r.tag_name} release notes`;
+        }
+      })
+      .catch(() => {
+        const s = $('status');
+        if (s) s.textContent = "Couldn't reach GitHub just now. The download button opens the releases page instead.";
+      });
+  }
+</script>

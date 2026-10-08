@@ -1,0 +1,62 @@
+---
+import { GISCUS, COMMUNITY, giscusReady } from '../config';
+
+interface Props {
+  /** Heading for the comments section. */
+  title?: string;
+}
+const { title = 'Comments' } = Astro.props;
+---
+
+<section class="giscus-wrap" aria-labelledby="comments-title">
+  <h2 id="comments-title">{title}</h2>
+  {
+    giscusReady ? (
+      <>
+        <p class="meta">
+          Comments live in the game's <a href={COMMUNITY.discussionsUrl}>GitHub Discussions</a>. Sign in with GitHub to
+          post, or comment there directly.
+        </p>
+        <div class="giscus" />
+        <script
+          is:inline
+          src="https://giscus.app/client.js"
+          data-repo={GISCUS.repo}
+          data-repo-id={GISCUS.repoId}
+          data-category={GISCUS.category}
+          data-category-id={GISCUS.categoryId}
+          data-mapping={GISCUS.mapping}
+          data-strict="1"
+          data-reactions-enabled={GISCUS.reactionsEnabled}
+          data-emit-metadata={GISCUS.emitMetadata}
+          data-input-position={GISCUS.inputPosition}
+          data-theme={GISCUS.theme}
+          data-lang={GISCUS.lang}
+          data-loading={GISCUS.loading}
+          crossorigin="anonymous"
+          async
+        />
+      </>
+    ) : (
+      <p class="notice">
+        Comments are coming soon. Until then, join the conversation in{' '}
+        <a href={COMMUNITY.discussionsUrl}>GitHub Discussions</a>.
+      </p>
+    )
+  }
+</section>
+
+<style>
+  .giscus-wrap {
+    margin-top: 3rem;
+  }
+  .meta {
+    color: var(--muted);
+  }
+  .giscus {
+    background: var(--bg-2);
+    padding: 1rem;
+    border: 4px solid var(--panel-edge);
+    min-height: 8rem;
+  }
+</style>
