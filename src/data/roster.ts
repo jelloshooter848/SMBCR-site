@@ -9,6 +9,8 @@
  * (src/game/characters/<id>/guide.ts in the SMBC repo). Default keys: arrows move, Z jump,
  * X attack / run, C special, Right Shift tools, Enter pause.
  *
+ * Written against game v0.4.32; see docs/GAME_BASELINE.md before updating for a new release.
+ *
  * Plain TypeScript with no enums or other non-erasable syntax, so Node can import it directly.
  */
 

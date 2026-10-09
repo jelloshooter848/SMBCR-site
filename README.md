@@ -74,6 +74,12 @@ from the repo's Actions variables). For a custom domain, see [docs/SETUP.md](doc
 
 Release notes don't need a post: the News page lists the game's GitHub Releases on its own.
 
+## Keep the site in step with the game
+
+The site's content describes game **v0.4.32** (commit `c87e869`). [docs/GAME_BASELINE.md](docs/GAME_BASELINE.md)
+records that baseline and has the steps and a checklist for updating the site when a new release (v0.5.0 first)
+comes out.
+
 ## Change hero or world data
 
 Heroes, worlds and chapters are all in [`src/data/roster.ts`](src/data/roster.ts). The moves follow each hero's in-game
