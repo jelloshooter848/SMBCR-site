@@ -16,6 +16,7 @@ const PAGES = [
   ['hero-link', 'heroes/link/'],
   ['worlds', 'worlds/'],
   ['news', 'news/'],
+  ['versions', 'versions/'],
   ['community', 'community/'],
   ['about', 'about/'],
 ];

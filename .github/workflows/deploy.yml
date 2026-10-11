@@ -32,6 +32,22 @@ jobs:
 
       - run: npm ci
 
+      # The older game versions on /versions/ (tools/archive): each vX.Y.0 tag of the game, built
+      # once and kept in the Actions cache, so a deploy only builds a version it hasn't seen.
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Restore archived game versions
+        uses: actions/cache@v4
+        with:
+          path: .versions-cache
+          key: versions-${{ hashFiles('tools/archive/**') }}-${{ env.BASE_PATH }}-${{ github.run_id }}
+          restore-keys: versions-${{ hashFiles('tools/archive/**') }}-${{ env.BASE_PATH }}-
+
+      - name: Build archived game versions
+        run: npm run versions
+
       - name: Build
         run: npm run build
 

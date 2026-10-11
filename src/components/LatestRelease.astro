@@ -15,7 +15,10 @@ const H = `h${headingLevel}`;
     <strong data-r="version">{GAME.chapter} · v{GAME.launchVersion}</strong>
     <span data-r="date"></span>
   </p>
-  <p>Play online any time, or download the zip to play offline: unzip it and open <code>index.html</code>.</p>
+  <p>
+    Play online any time, or download the zip to keep a copy. The zip is the game's website, so it needs a small local
+    web server: <a href={url('versions/#offline')}>how to play it offline</a>.
+  </p>
   <div class="btn-row">
     <a class="btn btn--red" href={url('play/')}>▶ Play now</a>
     <a class="btn" data-r="download" href={GAME.latestReleaseUrl}>Download zip</a>
