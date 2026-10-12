@@ -18,6 +18,7 @@ the game repo's issues, and the latest release is read from the GitHub API in th
 | `/play/`    | The game embedded in the page (loads on click), full-screen button, tips, download             |
 | `/heroes/`  | Every hero, and a page each with their moves, power-ups, tool belt, clip and home world        |
 | `/worlds/`  | The story, the eight themed worlds with their maps, and the Chapter 2 teaser                   |
+| `/versions/` | Every major and minor release of the game (vX.Y.0), playable in the browser, and how to play a zip offline |
 | `/news/`    | News posts (Markdown) and the release notes from GitHub Releases                               |
 | `/community/` | The forum, the giscus thread, house rules and how to report a bug                            |
 | `/about/`   | The tribute, credits, the fan-project disclaimer and privacy                                   |
@@ -53,6 +54,23 @@ form) is in [docs/SETUP.md](docs/SETUP.md).
 The site lives under `/SMBCR-site/`. Every internal link goes through `url()` in `src/lib.ts`, so the base path is
 set in one place: the `SITE_URL` and `BASE_PATH` environment variables (read in `astro.config.mjs`; in CI they come
 from the repo's Actions variables). For a custom domain, see [docs/SETUP.md](docs/SETUP.md#5-optional-a-custom-domain).
+
+## Older game versions
+
+`/versions/` lets people play every major and minor release of the game (the tags `vX.Y.0`; patch releases are left
+out). Nothing is committed for it: `npm run versions` (`tools/archive/build-versions.mjs`) clones each of those tags
+from the game repo, builds it with the game's own tooling for its folder on this site (`/SMBCR-site/versions/<tag>/`),
+and writes it to `public/versions/` (git-ignored) with an `index.json` the page lists. Built versions are cached in
+`.versions-cache/` (the Actions cache in CI), so a deploy only builds a version it hasn't seen; a new minor release
+appears on the next deploy.
+
+The archive is served from the same origin as the live game, so each archived copy gets
+`tools/archive/isolate-storage.js` as its first script: it keeps that version's saves and settings under its own
+prefix, so an old version never reads or overwrites a player's real save files. The one-line descriptions are in
+`src/data/versions.ts`.
+
+Run `npm run versions` once before `npm run dev` or `npm run build` to see them locally (needs git, pnpm and network
+access); without it the page says no older versions are in the build.
 
 ## Add a news post
 

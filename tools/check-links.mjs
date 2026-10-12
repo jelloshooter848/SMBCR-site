@@ -21,7 +21,7 @@ const idsOf = (file) => {
 
 const problems = [];
 const externals = new Set();
-const list = await pages(dir);
+const list = await pages(dir, { archives: true });
 for (const page of list) {
   const file = fileFor(dir, page);
   // Inline scripts can hold HTML in strings; keep only external scripts' opening tags.

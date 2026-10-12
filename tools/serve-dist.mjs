@@ -52,12 +52,16 @@ export function serve(dir, port = 0) {
   );
 }
 
-/** Every page in `dir`, as site paths with the base. */
-export async function pages(dir) {
+/**
+ * Every page in `dir`, as site paths with the base. The archived game builds (versions/<tag>/,
+ * tools/archive) are the game as released, not site pages: left out unless `archives` is true.
+ */
+export async function pages(dir, { archives = false } = {}) {
   const { readdir } = await import('node:fs/promises');
   const out = [];
   for (const f of await readdir(dir, { recursive: true })) {
     if (!f.endsWith('.html')) continue;
+    if (!archives && /^versions[\\/]v[^\\/]+[\\/]/.test(f)) continue;
     const p = `/${f.replace(/\\/g, '/')}`.replace(/index\.html$/, '');
     out.push(`${basePath()}${p}`);
   }

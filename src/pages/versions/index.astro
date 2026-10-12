@@ -1,0 +1,131 @@
+---
+import { existsSync, readFileSync } from 'node:fs';
+import Base from '../../layouts/Base.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import { GAME } from '../../config';
+import { VERSION_NOTES, type ArchivedVersion } from '../../data/versions';
+import { url } from '../../lib';
+
+// Written by tools/archive/build-versions.mjs (npm run versions) before the site is built.
+const manifest = 'public/versions/index.json';
+const versions: ArchivedVersion[] = existsSync(manifest) ? JSON.parse(readFileSync(manifest, 'utf8')) : [];
+// The date as the commit recorded it (its own time zone), not shifted to UTC.
+const fmt = (iso: string) =>
+  new Date(`${iso.slice(0, 10)}T12:00:00Z`).toLocaleDateString('en', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  });
+---
+
+<Base title="Older versions" description="Play earlier releases of Super Mario Bros. Crossover: REMIX in your browser, and see how the game grew.">
+  <PageBanner
+    title="Older versions"
+    intro="See how the game grew: every major and minor release, playable right in your browser."
+  />
+  <div class="wrap">
+    <div class="notice">
+      <p>
+        <strong>Each old version keeps its own save files and settings,</strong> separate from the current game, so
+        trying one never touches your progress. They are kept as they were released, bugs and all.
+      </p>
+      <p>
+        For the newest version, go to <a href={url('play/')}>Play</a>. Patch releases aren't archived here; every
+        release, with its notes and zip, is on <a href={GAME.releasesUrl}>GitHub Releases</a>.
+      </p>
+    </div>
+
+    {
+      versions.length ? (
+        <ol class="versions">
+          {versions.map((v) => (
+            <li class="panel version">
+              <div>
+                <h2>v{v.version}</h2>
+                <p class="meta">
+                  <time datetime={v.date.slice(0, 10)}>{fmt(v.date)}</time>
+                </p>
+                <p>{VERSION_NOTES[v.tag] ?? 'An earlier release of the game.'}</p>
+              </div>
+              <div class="btn-row">
+                <a class="btn btn--red" href={url(`versions/${v.tag}/`)}>
+                  ▶ Play v{v.version}
+                </a>
+                <a href={`${GAME.releasesUrl}/tag/${v.tag}`}>
+                  v{v.version} release notes
+                </a>
+              </div>
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <p class="notice">
+          No older versions are in this build of the site. Find them all on <a href={GAME.releasesUrl}>GitHub Releases</a>.
+        </p>
+      )
+    }
+
+    <section aria-labelledby="offline">
+      <h2 id="offline">Play offline</h2>
+      <p>
+        Every release on GitHub has an <code>smbc-vX.Y.Z.zip</code>: the game's website exactly as it went live. Browsers
+        won't run it straight from the folder, so serve it with any small local web server. With{' '}
+        <a href="https://nodejs.org">Node.js</a> installed:
+      </p>
+      <pre><code>mkdir SMBC
+unzip smbc-vX.Y.Z.zip -d SMBC
+npx serve .</code></pre>
+      <p>
+        Use the name of the zip you downloaded, then open <code>http://localhost:3000/SMBC/</code>. The folder must be called <code>SMBC</code>, because the zip is
+        built for that address.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .notice {
+    margin-top: 2.5rem;
+  }
+  pre {
+    background: var(--black);
+    border: var(--px) solid var(--panel-edge);
+    padding: 1rem;
+    overflow-x: auto;
+  }
+  #offline {
+    scroll-margin-top: 1rem;
+  }
+  .notice p:last-child {
+    margin-bottom: 0;
+  }
+  .versions {
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+    display: grid;
+    gap: 1.5rem;
+  }
+  .version {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1rem 2rem;
+    align-items: center;
+  }
+  .version h2 {
+    margin: 0;
+  }
+  .version .btn-row {
+    margin: 0;
+  }
+  .meta {
+    color: var(--muted);
+    margin: 0.25rem 0 0.75rem;
+  }
+  @media (max-width: 700px) {
+    .version {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

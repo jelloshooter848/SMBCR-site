@@ -37,7 +37,8 @@ const fmt = (d: Date) => d.toLocaleDateString('en', { year: 'numeric', month: 'l
       <h2 id="releases-title">Release notes</h2>
       <p>
         Straight from the game's <a href={GAME.releasesUrl}>GitHub Releases</a>. Each release has an{' '}
-        <code>smbc-vX.Y.Z.zip</code> for offline play.
+        <code>smbc-vX.Y.Z.zip</code> to <a href={url('versions/#offline')}>play offline</a>, and every major and minor
+        release is <a href={url('versions/')}>playable here</a>.
       </p>
       <p class="notice" data-releases-status aria-live="polite">
         Loading the latest releases… If nothing appears, read them on <a href={GAME.releasesUrl}>GitHub</a>.
