@@ -3,7 +3,7 @@
  * the capture tool (tools/capture/capture.mjs) all read it.
  *
  * Adding a Chapter 2 hero or world: add an entry to HEROES / WORLDS with `chapter: 2`, put its
- * clip and stills in public/media (run the capture tool), and the pages pick it up.
+ * clip and stills in campaign/media (run the capture tool), and the pages pick it up.
  *
  * Moves, power-ups and tool belts follow each hero's in-game "How to play" guide
  * (src/game/characters/<id>/guide.ts in the SMBC repo). Default keys: arrows move, Z jump,
@@ -141,7 +141,7 @@ export const HEROES: Hero[] = [
     from: 'Super Mario Bros.',
     tagline: 'The all-rounder',
     blurb:
-      'The hero you start with. Classic momentum, stomps, mushrooms and fire flowers, and the only one Bowser forgot to brainwash.',
+      'Classic momentum, stomps, mushrooms and fire flowers: Super Mario Bros. as you remember it.',
     chapter: 1,
     world: 1,
     hiddenIn: 'Free from the start. His tutorial stage, 1-0, opens every new file.',
@@ -162,7 +162,7 @@ export const HEROES: Hero[] = [
     from: 'Super Mario Bros.: The Lost Levels',
     tagline: 'Higher, floatier jumps',
     blurb:
-      'The same kit as his brother with a higher jump, slower acceleration and a longer slide. He runs off in 1-1, so the first rescue is a family one.',
+      'The same kit as his brother with a higher jump, slower acceleration and a longer slide.',
     chapter: 1,
     world: 1,
     hiddenIn: "1-1's bonus room, on a ledge at the top right.",

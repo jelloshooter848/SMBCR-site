@@ -2,8 +2,9 @@
 import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
 import Clip from '../../components/Clip.astro';
-import { HEROES, worldByNumber, KEYS, ABILITY, type Hero } from '../../data/roster';
+import { HEROES, worldByNumber, ABILITY, type Hero } from '../../data/roster';
 import { url, media } from '../../lib';
+import { SHOW_CAMPAIGN } from '../../config';
 
 export function getStaticPaths() {
   return HEROES.map((hero) => ({ params: { id: hero.id }, props: { hero } }));
@@ -20,20 +21,36 @@ const next = HEROES[(i + 1) % HEROES.length] as Hero;
 const itemName = { mushroom: 'Mushroom', flower: 'Fire flower', star: 'Star', drops: 'Enemy drops' };
 ---
 
-<Base title={hero.name} description={`${hero.name} in Super Mario Bros. Crossover: REMIX: ${hero.tagline.toLowerCase()}. Moves, power-ups and tool belt.`} image={`hero-${hero.id}.png`}>
+<Base title={hero.name} description={`${hero.name} in Super Mario Bros. Crossover: REMIX: ${hero.tagline.toLowerCase()}. Moves, power-ups and tool belt.`} image={SHOW_CAMPAIGN ? `hero-${hero.id}.png` : undefined}>
   <PageBanner title={hero.name} intro={`${hero.tagline}. Moves from ${hero.from}.`} />
   <div class="wrap">
-    <div class="hero-top">
-      <Clip name={`hero-${hero.id}`} label={`${hero.name} playing World ${hero.capture.level} in ${world?.title}.`} />
+    <div class:list={['hero-top', { 'hero-top--text': !SHOW_CAMPAIGN }]}>
+      {
+        /* The clips show the campaign's themed levels: kept for 1.0 (docs/CAMPAIGN.md). */
+        SHOW_CAMPAIGN && (
+          <Clip name={`hero-${hero.id}`} label={`${hero.name} playing World ${hero.capture.level} in ${world?.title}.`} />
+        )
+      }
       <div>
         <p class="lede">{hero.blurb}</p>
         <dl class="facts">
-          <dt>Home world</dt>
-          <dd><a href={url(`worlds/#world-${hero.world}`)}>World {hero.world}: {world?.title}</a> ({world?.style} style)</dd>
-          <dt>Where to find them</dt>
-          <dd>{hero.hiddenIn}</dd>
           {
-            hero.miniGame && (
+            SHOW_CAMPAIGN && (
+              <>
+                <dt>Home world</dt>
+                <dd>
+                  <a href={url(`worlds/#world-${hero.world}`)}>
+                    World {hero.world}: {world?.title}
+                  </a>{' '}
+                  ({world?.style} style)
+                </dd>
+                <dt>Where to find them</dt>
+                <dd>{hero.hiddenIn}</dd>
+              </>
+            )
+          }
+          {
+            SHOW_CAMPAIGN && hero.miniGame && (
               <>
                 <dt>Mini game</dt>
                 <dd>
@@ -52,15 +69,14 @@ const itemName = { mushroom: 'Mushroom', flower: 'Fire flower', star: 'Star', dr
       <h2 id="moves">Moves</h2>
       <div class="table-wrap panel">
         <table>
-          <caption class="visually-hidden">{hero.name}'s moves and their default keys</caption>
+          <caption class="visually-hidden">{hero.name}'s moves</caption>
           <thead>
-            <tr><th scope="col">Key</th><th scope="col">Ability</th><th scope="col">What it does</th></tr>
+            <tr><th scope="col">Ability</th><th scope="col">What it does</th></tr>
           </thead>
           <tbody>
             {
               hero.moves.map((m) => (
                 <tr>
-                  <td><kbd>{KEYS[m.action]}</kbd></td>
                   <td>{ABILITY[m.action]}</td>
                   <td>{m.does}</td>
                 </tr>
@@ -91,7 +107,7 @@ const itemName = { mushroom: 'Mushroom', flower: 'Fire flower', star: 'Star', dr
         <section aria-labelledby="belt">
           <h2 id="belt">Tool belt</h2>
           <p>
-            Press <kbd>Right Shift</kbd> (Tools) to pick a tool and <kbd>C</kbd> (Special) to use it.
+            <strong>Tools</strong> picks a tool and <strong>Special</strong> uses it.
           </p>
           <div class="table-wrap panel">
             <table>
@@ -127,7 +143,7 @@ const itemName = { mushroom: 'Mushroom', flower: 'Fire flower', star: 'Star', dr
       )
     }
 
-    <section aria-labelledby="world">
+    {SHOW_CAMPAIGN && (<section aria-labelledby="world">
       <h2 id="world">Home world: {world?.title}</h2>
       <div class="world-row">
         <div class="screen">
@@ -135,7 +151,7 @@ const itemName = { mushroom: 'Mushroom', flower: 'Fire flower', star: 'Star', dr
         </div>
         <p>{world?.blurb}</p>
       </div>
-    </section>
+    </section>)}
 
     <nav class="pager" aria-label="More heroes">
       <a class="btn btn--blue" href={url(`heroes/${prev.id}/`)}>◀ {prev.name}</a>
@@ -183,6 +199,9 @@ const itemName = { mushroom: 'Mushroom', flower: 'Fire flower', star: 'Star', dr
     gap: 1rem;
     justify-content: space-between;
     margin-top: 3rem;
+  }
+  .hero-top--text {
+    grid-template-columns: minmax(0, 52rem);
   }
   @media (max-width: 760px) {
     .hero-top,

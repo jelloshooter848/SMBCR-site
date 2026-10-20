@@ -9,10 +9,12 @@ const news = defineCollection({
     title: z.string(),
     date: z.coerce.date(),
     summary: z.string(),
-    /** Optional image in public/media, for the post's link preview. */
+    /** Optional image in media/ (public/media), for the post's link preview. */
     image: z.string().optional(),
     /** Drafts are left out of the build. */
     draft: z.boolean().default(false),
+    /** About the story campaign: built only with SHOW_CAMPAIGN=1 (until the 1.0 release). */
+    campaign: z.boolean().default(false),
   }),
 });
 

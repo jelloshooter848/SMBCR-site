@@ -2,7 +2,7 @@
 // Captures the clips and screenshots the site uses, straight from the game (the remake's own
 // original art). See tools/capture/README.md.
 //
-//   node tools/capture/capture.mjs [--url <game url>] [--out public/media] [--only link,samus]
+//   node tools/capture/capture.mjs [--url <game url>] [--out campaign/media] [--only link,samus]
 //                                  [--skip-clips] [--skip-maps]
 //
 // For each hero it seeds a save file in the browser (every world open, every hero freed), walks
@@ -25,7 +25,7 @@ const opt = (name, d) => {
 const flag = (name) => args.includes(`--${name}`);
 
 const GAME_URL = opt('url', 'https://jelloshooter848.github.io/SMBC/');
-const OUT = resolve(opt('out', 'public/media'));
+const OUT = resolve(opt('out', 'campaign/media'));
 const ONLY = opt('only', '')?.split(',').filter(Boolean) ?? [];
 const TMP = resolve('.capture-tmp');
 // The game draws 256x240 and scales by whole numbers; 512x480 gives a clean 2x.

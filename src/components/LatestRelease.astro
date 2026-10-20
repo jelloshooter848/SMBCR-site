@@ -9,19 +9,30 @@ const { headingLevel = 2 } = Astro.props;
 const H = `h${headingLevel}`;
 ---
 
-<section class="panel panel--gold release" data-latest-release data-api={GAME.releasesApi} aria-labelledby="latest-release-title">
+<section
+  class="panel panel--gold release"
+  data-latest-release
+  data-api={GAME.releasesApi}
+  data-first={`v${GAME.launchVersion}`}
+  aria-labelledby="latest-release-title"
+>
   <H id="latest-release-title">Latest release</H>
   <p class="release__line">
-    <strong data-r="version">{GAME.chapter} · v{GAME.launchVersion}</strong>
+    <strong data-r="version">Test builds until v{GAME.launchVersion}</strong>
     <span data-r="date"></span>
   </p>
+  <p data-r="test" hidden>
+    This is a <strong>test build</strong> on the way to version {GAME.launchVersion}, the first full release. Things may
+    change or break: <a href={url('community/#bugs')}>report what you find</a>.
+  </p>
   <p>
-    Play online any time, or download the zip to keep a copy. The zip is the game's website, so it needs a small local
-    web server: <a href={url('versions/#offline')}>how to play it offline</a>.
+    Play online any time, or download a copy: <a href={url('versions/#offline')}>which zip to pick, and how to play it
+    offline</a>.
   </p>
   <div class="btn-row">
     <a class="btn btn--red" href={url('play/')}>▶ Play now</a>
     <a class="btn" data-r="download" href={GAME.latestReleaseUrl}>Download zip</a>
+    <a class="btn" data-r="offline" href={GAME.latestReleaseUrl} hidden>Offline zip</a>
     <a data-r="notes" href={url('news/')}>What's new</a>
   </div>
   <p class="meta" data-r="status" aria-live="polite"></p>
@@ -45,7 +56,7 @@ const H = `h${headingLevel}`;
 </style>
 
 <script>
-  import { latestRelease, zipAsset, formatSize, formatDate } from '../scripts/releases';
+  import { latestRelease, zipAsset, offlineZipAsset, isBefore, formatSize, formatDate } from '../scripts/releases';
 
   for (const box of document.querySelectorAll<HTMLElement>('[data-latest-release]')) {
     const $ = (k: string) => box.querySelector<HTMLElement>(`[data-r="${k}"]`);
@@ -55,6 +66,16 @@ const H = `h${headingLevel}`;
         if (version) version.textContent = r.name || r.tag_name;
         const date = $('date');
         if (date) date.textContent = `Released ${formatDate(r.published_at)}`;
+        const test = $('test');
+        if (test) test.hidden = !(r.prerelease || isBefore(r.tag_name, box.dataset.first as string));
+        const offline = offlineZipAsset(r);
+        const off = $('offline') as HTMLAnchorElement | null;
+        if (off && offline) {
+          off.href = offline.browser_download_url;
+          off.textContent = `Download ${offline.name} (${formatSize(offline.size)})`;
+          off.setAttribute('download', '');
+          off.hidden = false;
+        }
         const zip = zipAsset(r);
         const dl = $('download') as HTMLAnchorElement | null;
         if (dl && zip) {

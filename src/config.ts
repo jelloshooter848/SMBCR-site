@@ -6,11 +6,18 @@
 /** The GitHub repo the game lives in (releases, issues, discussions). */
 const GAME_REPO = 'jelloshooter848/SMBC';
 
+/**
+ * The story campaign (Chapter 1) is not in the game until 1.0. Its pages and sections stay in the
+ * repo but are left out of the build unless SHOW_CAMPAIGN=1 is set (e.g. `SHOW_CAMPAIGN=1 npm run
+ * dev` to preview them). Flip the default for the 1.0 release. See docs/CAMPAIGN.md.
+ */
+export const SHOW_CAMPAIGN = typeof process !== 'undefined' && process.env.SHOW_CAMPAIGN === '1';
+
 export const SITE = {
   name: 'Super Mario Bros. Crossover: REMIX',
   shortName: 'SMBC REMIX',
   description:
-    'A free fan remake of Super Mario Bros. Crossover. Play Super Mario Bros. as Link, Mega Man, Samus, Simon, Ryu, Bill and Sophia III, right in your browser.',
+    'A free fan remake of Super Mario Bros. Crossover: play Super Mario Bros. and The Lost Levels as heroes from other NES classics, right in your browser.',
   /** The repo this site is built from. */
   siteRepo: 'jelloshooter848/SMBCR-site',
 };
@@ -24,9 +31,8 @@ export const GAME = {
   latestReleaseUrl: `https://github.com/${GAME_REPO}/releases/latest`,
   /** Read in the browser for the download button and the news page. */
   releasesApi: `https://api.github.com/repos/${GAME_REPO}/releases`,
-  /** Shown until the GitHub API answers (and if it never does). */
+  /** The first full release; earlier versions are test builds. Shown until the GitHub API answers. */
   launchVersion: '0.5.0',
-  chapter: 'Chapter 1',
 };
 
 export const COMMUNITY = {

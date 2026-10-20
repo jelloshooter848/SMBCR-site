@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import LatestRelease from '../components/LatestRelease.astro';
-import { GAME } from '../config';
+import { GAME, SHOW_CAMPAIGN } from '../config';
 import { media, url } from '../lib';
 ---
 
@@ -15,7 +15,13 @@ import { media, url } from '../lib';
 
     <div class="player" data-player data-src={GAME.playUrl}>
       <div class="player__start" data-player-start>
-        <img src={media('title.png')} alt="" width="512" height="480" />
+        {
+          SHOW_CAMPAIGN ? (
+            <img src={media('title.png')} alt="" width="512" height="480" />
+          ) : (
+            <img src={media('logo-remix.png')} alt="" width="470" height="180" />
+          )
+        }
         <button class="btn btn--red btn--play" type="button" data-player-button hidden>▶ Start the game here</button>
         <noscript>
           <a class="btn btn--red btn--play" href={GAME.playUrl}>▶ Play full screen</a>
@@ -38,8 +44,8 @@ import { media, url } from '../lib';
           outside it to get back to the page.
         </li>
         <li>
-          <strong>Keyboard:</strong> arrows move, <kbd>Z</kbd> jumps (OK in menus), <kbd>X</kbd> attacks or runs (back in
-          menus), <kbd>C</kbd> uses your tool, <kbd>Right Shift</kbd> picks a tool, <kbd>Enter</kbd> pauses.{' '}
+          <strong>Keyboard:</strong> every ability (Move, Jump, Attack, Special, Tools and Pause) has a key, shown and
+          remapped in <strong>Options → Controls</strong>.{' '}
           <a href={url('heroes/')}>Every hero's moves</a>.
         </li>
         <li><strong>Gamepad:</strong> plug it in and press a button. Standard layout.</li>
@@ -48,7 +54,7 @@ import { media, url } from '../lib';
           <em>Play full screen</em> button is the better pick on a small screen.
         </li>
         <li>
-          <strong>Accessibility:</strong> Options on the title screen lets you remap keys, reduce flashing, pick a
+          <strong>Accessibility:</strong> Options on the title screen lets you remap the controls, reduce flashing, pick a
           colour-blind palette and turn on screen-reader announcements.
         </li>
       </ul>

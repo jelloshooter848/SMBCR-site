@@ -3,9 +3,9 @@ import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
 import { GAME } from '../../config';
-import { url } from '../../lib';
+import { url, isPublished } from '../../lib';
 
-const posts = (await getCollection('news', (p) => !p.data.draft)).sort(
+const posts = (await getCollection('news', isPublished)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
 const fmt = (d: Date) => d.toLocaleDateString('en', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
