@@ -26,13 +26,13 @@ const H = `h${headingLevel}`;
     change or break: <a href={url('community/#bugs')}>report what you find</a>.
   </p>
   <p>
-    Play online any time, or download a copy: <a href={url('versions/#offline')}>which zip to pick, and how to play it
-    offline</a>.
+    Play online any time, or take it with you: the <strong>offline zip</strong> opens straight from its folder, with no
+    install. <a href={url('versions/#offline')}>About the downloads</a>.
   </p>
   <div class="btn-row">
     <a class="btn btn--red" href={url('play/')}>▶ Play now</a>
     <a class="btn" data-r="download" href={GAME.latestReleaseUrl}>Download zip</a>
-    <a class="btn" data-r="offline" href={GAME.latestReleaseUrl} hidden>Offline zip</a>
+    <a class="btn btn--blue" data-r="offline" href={GAME.latestReleaseUrl} hidden>Offline zip</a>
     <a data-r="notes" href={url('news/')}>What's new</a>
   </div>
   <p class="meta" data-r="status" aria-live="polite"></p>
@@ -68,6 +68,7 @@ const H = `h${headingLevel}`;
         if (date) date.textContent = `Released ${formatDate(r.published_at)}`;
         const test = $('test');
         if (test) test.hidden = !(r.prerelease || isBefore(r.tag_name, box.dataset.first as string));
+        // The offline zip is the download for players; the other one is the website, for hosting.
         const offline = offlineZipAsset(r);
         const off = $('offline') as HTMLAnchorElement | null;
         if (off && offline) {
@@ -75,6 +76,9 @@ const H = `h${headingLevel}`;
           off.textContent = `Download ${offline.name} (${formatSize(offline.size)})`;
           off.setAttribute('download', '');
           off.hidden = false;
+          off.className = 'btn';
+          const site = $('download');
+          if (site) site.className = 'btn btn--blue';
         }
         const zip = zipAsset(r);
         const dl = $('download') as HTMLAnchorElement | null;

@@ -8,6 +8,7 @@ The site's content was written against this version of the game:
 | **Commit** | `c87e8694fe612bcda633eab30c76bc16bc15c259` (SMBC `main`, 2026-10-08 14:23 -07:00) |
 | **Media in `campaign/media`** | Captured from a local production build of that same commit (see `campaign/media/CAPTURED.txt`) |
 | **Site written** | 2026-10-08 (PR #1) |
+| **Classic pages** (`src/data/classic.ts`) | Compiled 2026-10-20 from the game's Classic guides and options for 0.5.0, as of the v0.4.65 test build (game branch `claude/admiring-galileo-quy3ri`, commit `e1f750c`). Items due in later 0.5.0 batches are marked `later: true` |
 
 The site launches for **Chapter 1, v0.5.0**, which wasn't released yet. When v0.5.0 (or any later release) comes out,
 compare it with v0.4.32 as below and update the site. Then update the table above to the new version, so the next
@@ -33,7 +34,8 @@ what the changelog doesn't spell out.
 
 | Site content | Site file | Game source to compare |
 | --- | --- | --- |
-| Hero moves, power-ups, tool belts, tips, taglines | `src/data/roster.ts` (`HEROES`) | `src/game/characters/<id>/guide.ts` (Mario and Luigi: `mario/guide.ts`, with taglines in `mario/index.ts` and `luigi/index.ts`) |
+| Classic heroes, looks, Expansion heroes, maps, modes, cheats, accessibility | `src/data/classic.ts` | Each hero's Classic guide (`src/game/characters/<id>/classic-guide.ts`; Bill's in `bill/classic.ts`) and the Classic options |
+| Campaign hero moves, power-ups, tool belts, tips, taglines (hidden until 1.0) | `src/data/roster.ts` (`HEROES`) | `src/game/characters/<id>/guide.ts` (Mario and Luigi: `mario/guide.ts`, with taglines in `mario/index.ts` and `luigi/index.ts`) |
 | Hero list and order, new heroes | `src/data/roster.ts` (`HEROES`) | `src/game/characters/registry.ts` |
 | Where each hero hides, home world | `src/data/roster.ts` (`hiddenIn`, `world`) | `docs/STORY.md` ("Who is where"), `docs/HEROES.md` |
 | Mini game names and descriptions | `src/data/roster.ts` (`miniGame`) | `src/game/minigames/<id>/index.ts` (`title`), `docs/HEROES.md` |

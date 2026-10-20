@@ -1,0 +1,172 @@
+---
+import Base from '../layouts/Base.astro';
+import PageBanner from '../components/PageBanner.astro';
+import { MAP_SETS, DIFFICULTY, GAME_MODES, WEAPONS, MORE_SETTINGS, CHEATS, shown } from '../data/classic';
+import { url } from '../lib';
+---
+
+<Base title="Maps & modes" description="The map sets, difficulties, game modes, weapons, settings and cheats of Super Mario Bros. Crossover: REMIX Classic mode.">
+  <PageBanner
+    title="Maps & modes"
+    intro="Pick Classic on the title screen. The Classic menu lists the map sets, the map difficulty and the options."
+  />
+  <div class="wrap page">
+    <section aria-labelledby="sets">
+      <h2 id="sets">Map sets</h2>
+      <p>Every map set is open from the start. Each one shows <strong>BEATEN</strong> once you've cleared it.</p>
+      <div class="grid">
+        {
+          shown(MAP_SETS).map((m) => (
+            <div class="panel">
+              <h3>{m.name}</h3>
+              <p>{m.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section aria-labelledby="difficulty">
+      <h2 id="difficulty">Map difficulty: Easy, Normal, Hard</h2>
+      <ul>{DIFFICULTY.map((d) => <li>{d.text}</li>)}</ul>
+    </section>
+
+    <section aria-labelledby="modes">
+      <h2 id="modes">Game modes</h2>
+      <p>In <strong>Options → Game mode</strong>.</p>
+      <dl class="defs">
+        {
+          GAME_MODES.map((m) => (
+            <div>
+              <dt>{m.name}</dt>
+              <dd>{m.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section aria-labelledby="rules">
+      <h2 id="rules">Classic rules</h2>
+      <p>
+        <strong>Options → Classic rules</strong> is on by default: the heroes play as in the original, with its power
+        states, physics and weapons, a camera that scrolls back left, and areas kept as you left them. Map difficulty, More
+        settings, Weapons and Cheats need these rules. The other choice, <strong>Current</strong>, gives the heroes health
+        bars and their own upgrades instead; with it every map plays on Normal and cheats are off.
+      </p>
+    </section>
+
+    <section aria-labelledby="weapons">
+      <h2 id="weapons">Weapons</h2>
+      <p>
+        <strong>Options → Weapons</strong>, the original's Customize Weapons, picks each hero's power-up weapon. The
+        original's choice (listed first) is the default, and <strong>Restore originals</strong> puts every row back.
+      </p>
+      <div class="table-wrap panel">
+        <table>
+          <caption class="visually-hidden">Weapon choices for each hero</caption>
+          <thead>
+            <tr><th scope="col">Hero (power-up)</th><th scope="col">Choices, default first</th></tr>
+          </thead>
+          <tbody>
+            {
+              WEAPONS.map((w) => (
+                <tr>
+                  <td>{w.row}</td>
+                  <td>{w.choices}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="more">
+      <h2 id="more">More settings</h2>
+      <p>With Classic rules. Each setting starts at the original's value; <strong>Restore originals</strong> resets them.</p>
+      <dl class="defs">
+        {
+          MORE_SETTINGS.map((m) => (
+            <div>
+              <dt>{m.name}</dt>
+              <dd>{m.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section aria-labelledby="cheats">
+      <h2 id="cheats">Cheats</h2>
+      <p>
+        The original's cheats, in <strong>Options → Cheats</strong>, all off by default and for Classic rules only. A
+        locked cheat shows as <strong>?????</strong>: select it to see its goal. The original's secret code unlocks them all.
+      </p>
+      <div class="table-wrap panel">
+        <table>
+          <caption class="visually-hidden">Cheats, what they do and how to unlock them</caption>
+          <thead>
+            <tr><th scope="col">Cheat</th><th scope="col">What it does</th><th scope="col">How to unlock it</th></tr>
+          </thead>
+          <tbody>
+            {
+              shown(CHEATS).map((c) => (
+                <tr>
+                  <td>{c.name}</td>
+                  <td>{c.does}</td>
+                  <td>{c.unlock}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p>
+        <strong>Level Select</strong> unlocks once you beat every map set on Hard. It appears on the Cheats page and in the
+        pause menu: pick a map set, a difficulty, a world and a level.
+      </p>
+    </section>
+
+    <section aria-labelledby="music">
+      <h2 id="music">Music set</h2>
+      <p>
+        <strong>Options → Music set</strong>: <strong>Character</strong> (the default, as in the original) plays each
+        hero's own music, <strong>Map</strong> plays the Super Mario Bros. music for everyone, and <strong>Random</strong>{' '}
+        picks one of the two for each area. All of the music is our own.
+      </p>
+    </section>
+
+    <section aria-labelledby="chapter">
+      <h2 id="chapter">Chapter 1</h2>
+      <p>
+        Chapter 1, our story campaign, is on the title screen too, but it is coming soon (planned for version 1.0). Its
+        card says so, and any save files you already have are kept.
+      </p>
+    </section>
+
+    <p>
+      More on the heroes: <a href={url('heroes/')}>Heroes</a>. Controls and accessibility:{' '}
+      <a href={url('how-to-play/')}>How to play</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .page section {
+    margin-top: 2.5rem;
+  }
+  .page h3 {
+    margin-top: 0;
+    color: var(--gold);
+  }
+  .defs > div + div {
+    margin-top: 0.85rem;
+  }
+  .defs dt {
+    font-weight: 700;
+  }
+  .defs dd {
+    margin: 0.2rem 0 0;
+  }
+</style>

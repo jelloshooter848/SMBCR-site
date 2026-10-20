@@ -112,7 +112,7 @@ const features = [
       <h2 id="heroes-title">Pick your hero</h2>
       <p>
         {chapterHeroes.length} heroes in {GAME.chapter}, across {WORLDS.filter((w) => w.chapter === 1).length} worlds.{' '}
-        <a href={url('heroes/')}>See every hero's moves</a>.
+        <a href={url('chapter-1/heroes/')}>See every hero's moves</a>.
       </p>
       <div class="grid">
         {chapterHeroes.map((h) => <HeroCard hero={h} />)}

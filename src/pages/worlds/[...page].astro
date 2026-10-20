@@ -57,7 +57,7 @@ const lostKingdom = CHAPTERS.find((c) => c.number === 2);
                 <p>{w.blurb}</p>
                 <p>
                   <strong>Style:</strong> {w.style}. <strong>Hero to free:</strong>{' '}
-                  <a href={url(`heroes/${w.hero}/`)}>{hero?.name}</a>
+                  <a href={url(`chapter-1/heroes/${w.hero}/`)}>{hero?.name}</a>
                   {hero?.miniGame && <>, in the mini game {hero.miniGame.name}</>}.
                 </p>
                 <ul class="levels">

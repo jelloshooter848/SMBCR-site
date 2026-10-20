@@ -68,23 +68,26 @@ const fmt = (iso: string) =>
 
     <section aria-labelledby="offline">
       <h2 id="offline">Play offline</h2>
-      <p>
-        Newer releases come with two zips. <strong>The offline zip</strong>,{' '}
-        <code>smbc-remix-vX.Y.Z-offline.zip</code>, is the one made for playing offline: its release notes say how to
-        open it.
-      </p>
-      <p>
-        <strong>The other zip</strong>, <code>smbc-remix-vX.Y.Z.zip</code> (<code>smbc-vX.Y.Z.zip</code> on older
-        releases), is the game's website exactly as it went live. Browsers won't run it straight from the folder, so serve
-        it with any small local web server. With <a href="https://nodejs.org">Node.js</a> installed:
-      </p>
+      <p>Each release on GitHub has two zips.</p>
+      <ul>
+        <li>
+          <strong>The offline zip, <code>smbc-remix-vX.Y.Z-offline.zip</code>, is the download for players.</strong> It
+          holds the whole game in one <code>index.html</code>, plus a <code>README.txt</code>. Unzip it and double-click{' '}
+          <code>index.html</code>: no server, no install, no internet. Press a key or tap once to start the sound. It keeps
+          its own save files; move them with <strong>Options → Save files → Copy code / Paste code</strong>. Firefox keeps
+          saves per folder, so update in the same folder.
+        </li>
+        <li>
+          <strong>The other zip, <code>smbc-remix-vX.Y.Z.zip</code>, is the game's website</strong>, exactly as it went
+          live, for hosting. It needs a web server: unzip it into a folder named <code>SMBC</code>, serve the folder above
+          it, and open <code>/SMBC/</code>. With <a href="https://nodejs.org">Node.js</a> installed:
+        </li>
+      </ul>
       <pre><code>mkdir SMBC
 unzip smbc-remix-vX.Y.Z.zip -d SMBC
 npx serve .</code></pre>
-      <p>
-        Use the name of the zip you downloaded, then open <code>http://localhost:3000/SMBC/</code>. The folder must be
-        called <code>SMBC</code>, because the zip is built for that address.
-      </p>
+      <p>Then open <code>http://localhost:3000/SMBC/</code>.</p>
+      <p>Releases before 0.5.0 name them <code>smbc-vX.Y.Z-offline.zip</code> and <code>smbc-vX.Y.Z.zip</code>.</p>
     </section>
   </div>
 </Base>

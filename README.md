@@ -16,8 +16,9 @@ the game repo's issues, and the latest release is read from the GitHub API in th
 | ----------- | ---------------------------------------------------------------------------------------------- |
 | `/`         | Banner, PLAY button, pitch, clips, features, heroes, latest release                            |
 | `/play/`    | The game embedded in the page (loads on click), full-screen button, tips, download             |
-| `/heroes/`  | Every hero, and a page each with their moves, power-ups, tool belt, clip and home world        |
-| `/worlds/`  | The story, the eight themed worlds with their maps, and the Chapter 2 teaser                   |
+| `/heroes/`  | The Classic heroes (the original's ten, Random and the Expansion heroes), a page each with moves, power-ups and looks |
+| `/modes/`   | Maps & modes: map sets, difficulty, game modes, rules, Weapons, More settings, cheats, music |
+| `/how-to-play/` | Getting started, abilities, keyboard, gamepad and touch, accessibility options |
 | `/versions/` | Every major and minor release of the game (vX.Y.0), playable in the browser, and how to play a zip offline |
 | `/news/`    | News posts (Markdown) and the release notes from GitHub Releases                               |
 | `/community/` | The forum, the giscus thread, house rules and how to report a bug                            |
@@ -104,6 +105,12 @@ in `campaign/media`) is kept in the repo but left out of the build unless `SHOW_
 The site's content describes game **v0.4.32** (commit `c87e869`). [docs/GAME_BASELINE.md](docs/GAME_BASELINE.md)
 records that baseline and has the steps and a checklist for updating the site when a new release (v0.5.0 first)
 comes out.
+
+## Change Classic content
+
+Classic mode's heroes, looks, Expansion heroes, maps, modes, cheats and accessibility options are in
+[`src/data/classic.ts`](src/data/classic.ts). Anything built in the game but due in a later 0.5.0 batch is marked
+`later: true` and stays off the site until it ships: remove its flag then (or set `SHOW_UPCOMING`).
 
 ## Change hero or world data
 
