@@ -1,9 +1,16 @@
 ---
-import Base from '../layouts/Base.astro';
-import PageBanner from '../components/PageBanner.astro';
-import PixelArt from '../components/PixelArt.astro';
-import { WORLDS, CHAPTERS, heroById } from '../data/roster';
-import { url, media } from '../lib';
+import Base from '../../layouts/Base.astro';
+import PageBanner from '../../components/PageBanner.astro';
+import PixelArt from '../../components/PixelArt.astro';
+import { WORLDS, CHAPTERS, heroById } from '../../data/roster';
+import { url, media } from '../../lib';
+import { SHOW_CAMPAIGN } from '../../config';
+
+// Campaign page (Chapter 1, the 1.0 release): built at /worlds/ only with SHOW_CAMPAIGN=1.
+// A rest route with an undefined param is the folder's own index.
+export function getStaticPaths() {
+  return SHOW_CAMPAIGN ? [{ params: { page: undefined } }] : [];
+}
 
 const lostKingdom = CHAPTERS.find((c) => c.number === 2);
 ---

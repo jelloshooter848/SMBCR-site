@@ -6,7 +6,7 @@ The site's content was written against this version of the game:
 | --- | --- |
 | **Game version** | **v0.4.32** (tag `v0.4.32` in [jelloshooter848/SMBC](https://github.com/jelloshooter848/SMBC/releases/tag/v0.4.32)) |
 | **Commit** | `c87e8694fe612bcda633eab30c76bc16bc15c259` (SMBC `main`, 2026-10-08 14:23 -07:00) |
-| **Media in `public/media`** | Captured from a local production build of that same commit (see `public/media/CAPTURED.txt`) |
+| **Media in `campaign/media`** | Captured from a local production build of that same commit (see `campaign/media/CAPTURED.txt`) |
 | **Site written** | 2026-10-08 (PR #1) |
 
 The site launches for **Chapter 1, v0.5.0**, which wasn't released yet. When v0.5.0 (or any later release) comes out,
@@ -45,7 +45,7 @@ what the changelog doesn't spell out.
 | Bug form fields (hero list, version format) | `docs/for-smbc-repo/bug_report.yml` | `src/game/characters/registry.ts`, the title screen's version text |
 | Version shown before the API answers | `src/config.ts` (`GAME.launchVersion`) | `package.json` `version` |
 | Launch post | `src/content/news/2026-10-08-chapter-1.md` | `CHANGELOG.md` `## [0.5.0]` (set the post's date to the release date too) |
-| Clips and screenshots | `public/media/*` | Everything visible: re-capture (step 3) |
+| Clips and screenshots | `campaign/media/*` (campaign), `public/media/*` (Classic) | Everything visible: re-capture (step 3) |
 
 Some things update themselves and need no work: the latest release and its zip download (Home, Play), and the
 release notes on the News page. Both are read from GitHub Releases in the visitor's browser.
@@ -60,7 +60,7 @@ npm run capture              # records from https://jelloshooter848.github.io/SM
 ```
 
 Look through the new files (each clip should show its hero playing their own level; see `tools/capture/README.md`),
-then update `public/media/CAPTURED.txt` to name the version you captured from.
+then update `campaign/media/CAPTURED.txt` to name the version you captured from.
 
 ## 4. Finish
 

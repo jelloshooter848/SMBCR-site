@@ -81,7 +81,7 @@ access); without it the page says no older versions are in the build.
    title: 'World 9 is open'
    date: 2026-11-01
    summary: 'One or two sentences for the news list and link previews.'
-   image: map-smb-2.png # optional, a file in public/media for link previews
+   image: logo-remix.png # optional, a file in public/media for link previews
    draft: false # optional; true keeps it out of the build
    ---
 
@@ -91,6 +91,13 @@ access); without it the page says no older versions are in the build.
 2. Commit and push. The file name (without `.md`) becomes the address: `/news/2026-11-01-world-9/`.
 
 Release notes don't need a post: the News page lists the game's GitHub Releases on its own.
+
+## The story campaign is hidden until 1.0
+
+Version 0.5.0 of the game is Classic mode; the story campaign (Chapter 1) comes in 1.0. Everything the site had for
+it (the Worlds page, the campaign parts of hero pages, the Chapter 1 home page and post, and the clips and screenshots
+in `campaign/media`) is kept in the repo but left out of the build unless `SHOW_CAMPAIGN=1` is set. Preview it with
+`SHOW_CAMPAIGN=1 npm run dev`. See [docs/CAMPAIGN.md](docs/CAMPAIGN.md) for what is hidden and how to bring it back.
 
 ## Keep the site in step with the game
 
@@ -111,14 +118,15 @@ run the capture tool for its clip (below), and the Heroes pages, cards and nav p
 
 ## Clips and screenshots
 
-`public/media` is captured from the game with Playwright: `npm run capture`. See
+The campaign clips and stills in `campaign/media` are captured from the game with Playwright: `npm run capture`
+(it records the campaign's themed levels, so they are published only with the campaign, see below). See
 [tools/capture/README.md](tools/capture/README.md). `npm run screenshots` (after a build) takes full-page shots of
 the site at desktop and phone widths into `docs/screenshots/`.
 
 ## Licenses and credits
 
 The site's code and text are MIT licensed (see [LICENSE](LICENSE)). The pixel-art accents in `src/data/sprites.ts` are
-drawn for this site. Game captures in `public/media` show the remake's own original art (MIT, from the SMBC project).
+drawn for this site. Game captures in `campaign/media` show the remake's own original art (MIT, from the SMBC project).
 Fonts: Press Start 2P and Atkinson Hyperlegible (SIL Open Font License), bundled through Fontsource.
 
 Fan project: not affiliated with or endorsed by Nintendo, Capcom, Konami, Tecmo / Koei Tecmo, Sunsoft or Exploding

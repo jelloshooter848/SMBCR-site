@@ -3,17 +3,18 @@ import '@fontsource/press-start-2p/400.css';
 import '@fontsource/atkinson-hyperlegible/400.css';
 import '@fontsource/atkinson-hyperlegible/700.css';
 import '../styles/global.css';
-import { SITE, GAME } from '../config';
+import { SITE, GAME, SHOW_CAMPAIGN } from '../config';
 import { url, media } from '../lib';
 
 interface Props {
   title?: string;
   description?: string;
-  /** An image in public/media for link previews. */
+  /** An image in media/ for link previews. */
   image?: string;
 }
 
-const { title, description = SITE.description, image = 'title.png' } = Astro.props;
+// title.png is the campaign's title screen (it says CHAPTER 1); the Classic site uses the REMIX logo.
+const { title, description = SITE.description, image = SHOW_CAMPAIGN ? 'title.png' : 'logo-remix.png' } = Astro.props;
 const fullTitle = title ? `${title} | ${SITE.shortName}` : `${SITE.name}: play it free in your browser`;
 const path = Astro.url.pathname;
 const canonical = new URL(path, Astro.site).href;
@@ -22,7 +23,7 @@ const ogImage = new URL(media(image), Astro.site).href;
 const nav = [
   { href: url(''), label: 'Home' },
   { href: url('heroes/'), label: 'Heroes' },
-  { href: url('worlds/'), label: 'Worlds' },
+  ...(SHOW_CAMPAIGN ? [{ href: url('worlds/'), label: 'Worlds' }] : []),
   { href: url('news/'), label: 'News' },
   { href: url('community/'), label: 'Community' },
   { href: url('about/'), label: 'About' },

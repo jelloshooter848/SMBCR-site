@@ -69,16 +69,21 @@ const fmt = (iso: string) =>
     <section aria-labelledby="offline">
       <h2 id="offline">Play offline</h2>
       <p>
-        Every release on GitHub has an <code>smbc-vX.Y.Z.zip</code>: the game's website exactly as it went live. Browsers
-        won't run it straight from the folder, so serve it with any small local web server. With{' '}
-        <a href="https://nodejs.org">Node.js</a> installed:
+        Newer releases come with two zips. <strong>The offline zip</strong>,{' '}
+        <code>smbc-remix-vX.Y.Z-offline.zip</code>, is the one made for playing offline: its release notes say how to
+        open it.
+      </p>
+      <p>
+        <strong>The other zip</strong>, <code>smbc-remix-vX.Y.Z.zip</code> (<code>smbc-vX.Y.Z.zip</code> on older
+        releases), is the game's website exactly as it went live. Browsers won't run it straight from the folder, so serve
+        it with any small local web server. With <a href="https://nodejs.org">Node.js</a> installed:
       </p>
       <pre><code>mkdir SMBC
-unzip smbc-vX.Y.Z.zip -d SMBC
+unzip smbc-remix-vX.Y.Z.zip -d SMBC
 npx serve .</code></pre>
       <p>
-        Use the name of the zip you downloaded, then open <code>http://localhost:3000/SMBC/</code>. The folder must be called <code>SMBC</code>, because the zip is
-        built for that address.
+        Use the name of the zip you downloaded, then open <code>http://localhost:3000/SMBC/</code>. The folder must be
+        called <code>SMBC</code>, because the zip is built for that address.
       </p>
     </section>
   </div>
@@ -89,6 +94,8 @@ npx serve .</code></pre>
     margin-top: 2.5rem;
   }
   pre {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
     background: var(--black);
     border: var(--px) solid var(--panel-edge);
     padding: 1rem;

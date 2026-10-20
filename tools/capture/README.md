@@ -1,6 +1,10 @@
 # Re-capturing the clips and screenshots
 
-Everything in `public/media` comes from the game itself (the remake's own original art), recorded by
+The tool walks the story campaign (save files, world map, themed levels), so its output belongs to the campaign and
+lives in `campaign/media`, published only with `SHOW_CAMPAIGN=1` (docs/CAMPAIGN.md). Classic-mode media goes in
+`public/media`.
+
+Everything in `campaign/media` comes from the game itself (the remake's own original art), recorded by
 `tools/capture/capture.mjs` with Playwright and cut with ffmpeg.
 
 | File                                    | What it is                                                      |
@@ -22,7 +26,7 @@ npm run capture -- --only smb-2 --skip-clips     # just World 2's map
 npm run capture -- --url http://localhost:4173/  # a local build of the game (pnpm build && pnpm preview)
 ```
 
-Options: `--url` (default `https://jelloshooter848.github.io/SMBC/`), `--out` (default `public/media`), `--only` (hero
+Options: `--url` (default `https://jelloshooter848.github.io/SMBC/`), `--out` (default `campaign/media`), `--only` (hero
 ids, map page ids such as `smb-3`, and `screens` for the title, logo and hero select), `--skip-clips`, `--skip-maps`.
 Set `CHROMIUM_PATH` to use a particular Chromium. Commit the new files afterwards.
 

@@ -48,9 +48,26 @@ async function cachedJson<T>(apiUrl: string): Promise<T> {
 export const latestRelease = (api: string) => cachedJson<Release>(`${api}/latest`);
 export const releases = (api: string, count = 10) => cachedJson<Release[]>(`${api}?per_page=${count}`);
 
-/** The offline zip (smbc-vX.Y.Z.zip), or any zip the release has. */
+const isOffline = (a: ReleaseAsset) => /-offline\.zip$/i.test(a.name);
+
+/**
+ * The release's main zip: smbc-remix-vX.Y.Z.zip (older releases: smbc-vX.Y.Z.zip), or any zip
+ * that isn't the offline one.
+ */
 export function zipAsset(r: Release): ReleaseAsset | undefined {
-  return r.assets.find((a) => /^smbc-v[\d.]+.*\.zip$/i.test(a.name)) ?? r.assets.find((a) => a.name.endsWith('.zip'));
+  const zips = r.assets.filter((a) => a.name.endsWith('.zip') && !isOffline(a));
+  return zips.find((a) => /^smbc(-remix)?-v[\d.]+.*\.zip$/i.test(a.name)) ?? zips[0];
+}
+
+/** The offline zip, smbc-remix-vX.Y.Z-offline.zip, when the release has one. */
+export const offlineZipAsset = (r: Release): ReleaseAsset | undefined => r.assets.find(isOffline);
+
+/** Whether `tag` comes before `first` (both like v0.5.0): the releases before 0.5.0 are test builds. */
+export function isBefore(tag: string, first: string): boolean {
+  const n = (v: string) => v.replace(/^v/, '').split(/[.-]/).slice(0, 3).map((x) => Number.parseInt(x, 10) || 0);
+  const [a, b] = [n(tag), n(first)];
+  for (let i = 0; i < 3; i++) if ((a[i] ?? 0) !== (b[i] ?? 0)) return (a[i] ?? 0) < (b[i] ?? 0);
+  return false;
 }
 
 export const formatSize = (bytes: number): string =>
