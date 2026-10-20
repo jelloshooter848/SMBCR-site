@@ -23,6 +23,8 @@ const ogImage = new URL(media(image), Astro.site).href;
 const nav = [
   { href: url(''), label: 'Home' },
   { href: url('heroes/'), label: 'Heroes' },
+  { href: url('modes/'), label: 'Maps & modes' },
+  { href: url('how-to-play/'), label: 'How to play' },
   ...(SHOW_CAMPAIGN ? [{ href: url('worlds/'), label: 'Worlds' }] : []),
   { href: url('news/'), label: 'News' },
   { href: url('community/'), label: 'Community' },

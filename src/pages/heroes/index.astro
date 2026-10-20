@@ -1,122 +1,105 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
-import HeroCard from '../../components/HeroCard.astro';
-import { HEROES, CHAPTERS } from '../../data/roster';
-import { media } from '../../lib';
-import { SHOW_CAMPAIGN } from '../../config';
+import { CLASSIC_HEROES, EXPANSION_HEROES, HERO_RULES, RANDOM, shown } from '../../data/classic';
+import { url } from '../../lib';
 
-const chapters = CHAPTERS.map((c) => ({ ...c, heroes: HEROES.filter((h) => h.chapter === c.number) }));
-// Without the campaign the heroes are one list, with no chapters.
-const intro = SHOW_CAMPAIGN
-  ? "Bowser's spell pulled heroes from eight other worlds into the Mushroom Kingdom. Each plays Super Mario Bros. with the moves of their own game."
-  : 'Heroes from other NES classics, each playing Super Mario Bros. with the moves of their own game.';
+const lookCount = (id: string) => shown(CLASSIC_HEROES.find((h) => h.id === id)?.looks ?? []).length;
 ---
 
-<Base title="Heroes" description="Every hero in Super Mario Bros. Crossover: REMIX, with their moves, power-ups and tool belts.">
-  <PageBanner title="Heroes" intro={intro} />
+<Base title="Heroes" description="The heroes of Super Mario Bros. Crossover: REMIX Classic mode: their moves, power-ups and looks, plus the optional Expansion heroes.">
+  <PageBanner
+    title="Heroes"
+    intro="The original's ten heroes and a Random pick, each playing Super Mario Bros. with the moves of their own game."
+  />
   <div class="wrap">
-    {SHOW_CAMPAIGN && (<figure class="select">
-      <div class="screen">
-        <img
-          src={media('hero-select.png')}
-          alt="The hero select screen: Mario, Luigi, Link, Mega Man, Samus, Simon, Ryu, Bill and the tank Sophia III in a row."
-          width="512"
-          height="480"
-        />
-      </div>
-      <figcaption>
-        A new save file starts with Mario only. The others show as silhouettes until you free them. Outside the campaign
-        (custom levels, shared links, level select) every hero is playable from the start.
-      </figcaption>
-    </figure>)}
+    <section aria-labelledby="select-title">
+      <h2 id="select-title">The hero select</h2>
+      <p>Five heroes on the top row and six on the bottom, laid out as in the original.</p>
+      <ul class="rules">
+        {shown(HERO_RULES).map((r) => <li>{r.text}</li>)}
+      </ul>
+    </section>
 
-    {
-      !SHOW_CAMPAIGN && (
-        <section aria-labelledby="roster-title" class="roster">
-          <h2 id="roster-title" class="visually-hidden">All heroes</h2>
-          <div class="grid">
-            {HEROES.map((h) => (
-              <HeroCard hero={h} />
-            ))}
-          </div>
-        </section>
-      )
-    }
+    <section aria-labelledby="roster-title">
+      <h2 id="roster-title">The heroes</h2>
+      <ul class="grid roster">
+        {
+          CLASSIC_HEROES.map((h) => (
+            <li class="panel card" style={`--accent: ${h.color}`}>
+              <h3>
+                <a href={url(`heroes/${h.id}/`)}>{h.name}</a>
+              </h3>
+              <p>{h.tagline}.</p>
+              {lookCount(h.id) > 1 && <p class="meta">{lookCount(h.id)} looks</p>}
+            </li>
+          ))
+        }
+        <li class="panel card">
+          <h3>Random</h3>
+          {shown(RANDOM).map((r) => <p>{r.text}</p>)}
+        </li>
+      </ul>
+    </section>
 
-    {
-      SHOW_CAMPAIGN &&
-      chapters.map((c) =>
-        c.heroes.length ? (
-          <section aria-labelledby={`chapter-${c.number}`}>
-            <h2 id={`chapter-${c.number}`}>
-              Chapter {c.number}: {c.name}
-            </h2>
-            <div class="grid">
-              {c.heroes.map((h) => (
-                <HeroCard hero={h} />
-              ))}
-            </div>
-          </section>
-        ) : (
-          <section aria-labelledby={`chapter-${c.number}`} class="panel later">
-            <h2 id={`chapter-${c.number}`}>
-              Chapter {c.number}: {c.name}
-            </h2>
-            <p>{c.blurb}</p>
-            <p>New heroes join here when the chapter ships.</p>
-          </section>
-        ),
-      )
-    }
-
-    <section aria-labelledby="controls-title">
-      <h2 id="controls-title">Controls</h2>
+    <section aria-labelledby="expansion-title" class="expansion">
+      <h2 id="expansion-title">Expansion heroes</h2>
       <p>
-        Every hero uses the same abilities; what they do changes from hero to hero. Remap the controls in
-        <strong>Options → Controls</strong>. Gamepads use the standard layout, and on phones and tablets the touch buttons are
-        labelled with what each one does for your hero right now.
+        <strong>Options → Expansion heroes</strong> is off by default, so the select is the original's. Turn it on and four
+        heroes the original never had join the select, after the original heroes and before Random, all with our own art.
       </p>
-      <div class="table-wrap panel">
-        <table>
-          <caption class="visually-hidden">The abilities every hero has</caption>
-          <thead>
-            <tr><th scope="col">Ability</th><th scope="col">In a level</th><th scope="col">In menus</th></tr>
-          </thead>
-          <tbody>
-            <tr><td>Move</td><td>Walk and run, aim, crouch, climb</td><td>Move the cursor</td></tr>
-            <tr><td>Jump</td><td>Jump</td><td>OK</td></tr>
-            <tr><td>Attack</td><td>Attack (Mario and Luigi: run)</td><td>Back</td></tr>
-            <tr><td>Special</td><td>Use the selected tool</td><td></td></tr>
-            <tr><td>Tools</td><td>Cycle the tool belt</td><td></td></tr>
-            <tr><td>Pause</td><td>Pause and open the menu</td><td></td></tr>
-          </tbody>
-        </table>
+      <div class="grid">
+        {
+          EXPANSION_HEROES.map((h) => (
+            <section class="panel" aria-labelledby={`x-${h.name.replace(/\W+/g, '-')}`}>
+              <h3 id={`x-${h.name.replace(/\W+/g, '-')}`}>{h.name}</h3>
+              <p class="meta">{h.tagline}.</p>
+              <ul>
+                {h.points.map((p) => (
+                  <li>{p}</li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
       </div>
     </section>
   </div>
 </Base>
 
 <style>
-  .select {
-    margin: 2.5rem 0 0;
-    display: grid;
-    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
-    gap: 1.5rem;
-    align-items: center;
-  }
-  .select figcaption {
-    font-size: 1.15rem;
-  }
-  .later {
-    margin-top: 3rem;
+  .rules li {
+    margin-bottom: 0.5rem;
   }
   .roster {
-    margin-top: 2.5rem;
+    list-style: none;
+    padding: 0;
   }
-  @media (max-width: 700px) {
-    .select {
-      grid-template-columns: 1fr;
-    }
+  .roster .card {
+    border-color: var(--accent, var(--panel-edge));
+  }
+  .roster h3,
+  .expansion h3 {
+    margin: 0 0 0.5rem;
+  }
+  .roster h3 a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .roster h3 a:hover {
+    color: var(--gold);
+  }
+  .roster p {
+    margin: 0 0 0.5rem;
+  }
+  .meta {
+    color: var(--muted);
+  }
+  .expansion ul {
+    padding-left: 1.2rem;
+    margin: 0;
+  }
+  .expansion li {
+    margin-bottom: 0.4rem;
   }
 </style>

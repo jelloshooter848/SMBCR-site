@@ -1,0 +1,128 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageBanner from '../../../components/PageBanner.astro';
+import HeroCard from '../../../components/HeroCard.astro';
+import { HEROES, CHAPTERS } from '../../../data/roster';
+import { media } from '../../../lib';
+import { SHOW_CAMPAIGN } from '../../../config';
+
+// The campaign's heroes (Chapter 1, the 1.0 release): built at /chapter-1/heroes/ only with
+// SHOW_CAMPAIGN=1 (docs/CAMPAIGN.md). The Classic heroes are at /heroes/.
+export function getStaticPaths() {
+  return SHOW_CAMPAIGN ? [{ params: { page: undefined } }] : [];
+}
+
+const chapters = CHAPTERS.map((c) => ({ ...c, heroes: HEROES.filter((h) => h.chapter === c.number) }));
+// Without the campaign the heroes are one list, with no chapters.
+const intro = SHOW_CAMPAIGN
+  ? "Bowser's spell pulled heroes from eight other worlds into the Mushroom Kingdom. Each plays Super Mario Bros. with the moves of their own game."
+  : 'Heroes from other NES classics, each playing Super Mario Bros. with the moves of their own game.';
+---
+
+<Base title="Heroes" description="Every hero in Super Mario Bros. Crossover: REMIX, with their moves, power-ups and tool belts.">
+  <PageBanner title="Heroes" intro={intro} />
+  <div class="wrap">
+    {SHOW_CAMPAIGN && (<figure class="select">
+      <div class="screen">
+        <img
+          src={media('hero-select.png')}
+          alt="The hero select screen: Mario, Luigi, Link, Mega Man, Samus, Simon, Ryu, Bill and the tank Sophia III in a row."
+          width="512"
+          height="480"
+        />
+      </div>
+      <figcaption>
+        A new save file starts with Mario only. The others show as silhouettes until you free them. Outside the campaign
+        (custom levels, shared links, level select) every hero is playable from the start.
+      </figcaption>
+    </figure>)}
+
+    {
+      !SHOW_CAMPAIGN && (
+        <section aria-labelledby="roster-title" class="roster">
+          <h2 id="roster-title" class="visually-hidden">All heroes</h2>
+          <div class="grid">
+            {HEROES.map((h) => (
+              <HeroCard hero={h} />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    {
+      SHOW_CAMPAIGN &&
+      chapters.map((c) =>
+        c.heroes.length ? (
+          <section aria-labelledby={`chapter-${c.number}`}>
+            <h2 id={`chapter-${c.number}`}>
+              Chapter {c.number}: {c.name}
+            </h2>
+            <div class="grid">
+              {c.heroes.map((h) => (
+                <HeroCard hero={h} />
+              ))}
+            </div>
+          </section>
+        ) : (
+          <section aria-labelledby={`chapter-${c.number}`} class="panel later">
+            <h2 id={`chapter-${c.number}`}>
+              Chapter {c.number}: {c.name}
+            </h2>
+            <p>{c.blurb}</p>
+            <p>New heroes join here when the chapter ships.</p>
+          </section>
+        ),
+      )
+    }
+
+    <section aria-labelledby="controls-title">
+      <h2 id="controls-title">Controls</h2>
+      <p>
+        Every hero uses the same abilities; what they do changes from hero to hero. Remap the controls in
+        <strong>Options → Controls</strong>. Gamepads use the standard layout, and on phones and tablets the touch buttons are
+        labelled with what each one does for your hero right now.
+      </p>
+      <div class="table-wrap panel">
+        <table>
+          <caption class="visually-hidden">The abilities every hero has</caption>
+          <thead>
+            <tr><th scope="col">Ability</th><th scope="col">In a level</th><th scope="col">In menus</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Move</td><td>Walk and run, aim, crouch, climb</td><td>Move the cursor</td></tr>
+            <tr><td>Jump</td><td>Jump</td><td>OK</td></tr>
+            <tr><td>Attack</td><td>Attack (Mario and Luigi: run)</td><td>Back</td></tr>
+            <tr><td>Special</td><td>Use the selected tool</td><td></td></tr>
+            <tr><td>Tools</td><td>Cycle the tool belt</td><td></td></tr>
+            <tr><td>Pause</td><td>Pause and open the menu</td><td></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .select {
+    margin: 2.5rem 0 0;
+    display: grid;
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .select figcaption {
+    font-size: 1.15rem;
+  }
+  .later {
+    margin-top: 3rem;
+  }
+  .roster {
+    margin-top: 2.5rem;
+  }
+  @media (max-width: 700px) {
+    .select {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

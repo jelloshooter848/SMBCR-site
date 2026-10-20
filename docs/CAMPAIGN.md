@@ -20,8 +20,7 @@ The switch is `SHOW_CAMPAIGN` in `src/config.ts` (and `astro.config.mjs`, for th
 | --- | --- | --- |
 | The Worlds page (story, eight themed worlds, maps, Chapter 2 teaser) | `src/pages/worlds/[...page].astro` | No page is generated; no nav link |
 | The Chapter 1 home page | `src/campaign/HomeChapter1.astro` | `/` shows the Classic home instead |
-| Hero pages: home world, where each hero hides, their mini game, their clip and world map | `src/pages/heroes/[id].astro`, `src/components/HeroCard.astro`, fields in `src/data/roster.ts` | Left out of the pages |
-| Heroes index: the hero select screen, chapters | `src/pages/heroes/index.astro` | One plain list of heroes |
+| The campaign's heroes (nine, with home worlds, hiding places, mini games, clips and maps) | `src/pages/chapter-1/heroes/`, `src/components/HeroCard.astro`, `src/data/roster.ts` | No pages; `/heroes/` shows the Classic heroes (`src/data/classic.ts`) |
 | The "Chapter 1 is here" news post | `src/content/news/2026-10-08-chapter-1.md` (`campaign: true`) | Not built |
 | Clips and screenshots of the campaign (hero clips, world maps, title, hero select) | `campaign/media/` | Not copied into the site: no URLs |
 

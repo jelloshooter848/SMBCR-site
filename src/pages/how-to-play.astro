@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+import PageBanner from '../components/PageBanner.astro';
+import { ACCESSIBILITY } from '../data/classic';
+import { GAME } from '../config';
+import { url } from '../lib';
+
+const abilities = [
+  { name: 'Move', text: 'Walk, aim, crouch and climb.' },
+  { name: 'Jump', text: 'Jump, and swim. OK in menus.' },
+  { name: 'Attack', text: 'Each hero’s attack; hold it to run. Back in menus.' },
+  { name: 'Special', text: 'Each hero’s special weapon or move.' },
+  { name: 'Tools', text: 'Each hero’s extra tool or weapon swap. Back in menus.' },
+  { name: 'Pause / Menu', text: 'Pause the game and open its menu. OK in menus.' },
+];
+---
+
+<Base title="How to play" description="How to play Super Mario Bros. Crossover: REMIX: getting started, controls on keyboard, gamepad and touch, and the accessibility options.">
+  <PageBanner title="How to play" intro="Keyboard, gamepad or touch: the game switches between them as you use them." />
+  <div class="wrap page">
+    <section aria-labelledby="start">
+      <h2 id="start">Getting started</h2>
+      <ol>
+        <li><a href={url('play/')}>Open the game</a>, here or <a href={GAME.playUrl}>full screen</a>.</li>
+        <li>On the title screen, pick <strong>Classic</strong>.</li>
+        <li>Pick a map set, then a hero. Each hero plays their own way: <a href={url('heroes/')}>see how</a>.</li>
+      </ol>
+      <p>
+        Sound starts on your first press or tap. The game saves your settings and progress in your browser.
+      </p>
+    </section>
+
+    <section aria-labelledby="abilities">
+      <h2 id="abilities">Abilities</h2>
+      <p>
+        Every hero has the same abilities; what they do changes from hero to hero. Every screen and prompt names the
+        ability, not the key, and <strong>Options → Controls</strong> lists your keys and pad buttons.
+      </p>
+      <dl class="defs panel">
+        {
+          abilities.map((a) => (
+            <div>
+              <dt>{a.name}</dt>
+              <dd>{a.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section aria-labelledby="devices">
+      <h2 id="devices">Keyboard, gamepad and touch</h2>
+      <ul>
+        <li><strong>Keyboard and gamepad:</strong> both work out of the box, and every ability can be remapped on either.</li>
+        <li>
+          <strong>Touch:</strong> an on-screen pad, set to Auto, On or Off, with a fixed d-pad or a floating stick and an
+          adjustable size. The buttons are captioned with your hero's moves (SWORD, MISSILE, RUSH). On the hero select, tap
+          a hero to move there and tap again to pick.
+        </li>
+        <li>
+          <strong>Phones and tablets</strong> can add the game to the Home Screen. On a small screen, full screen is
+          roomier than the version embedded on this site.
+        </li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="access">
+      <h2 id="access">Accessibility options</h2>
+      <p>In <strong>Options</strong> on the title screen (Video, Audio and Controls).</p>
+      <dl class="defs">
+        {
+          ACCESSIBILITY.map((a) => (
+            <div>
+              <dt>{a.name}</dt>
+              <dd>{a.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p>
+        Unlocked cheats (Invincible, Infinite Lives, Infinite Time, Extra Checkpoints, Level Select) and More settings
+        (Lives, When hit) can make the game easier: see <a href={url('modes/')}>Maps &amp; modes</a>.
+      </p>
+    </section>
+
+    <section aria-labelledby="offline">
+      <h2 id="offline">Playing offline</h2>
+      <p>
+        Download the offline zip from the <a href={url('versions/#offline')}>downloads</a>, unzip it, and open its{' '}
+        <code>index.html</code>. No install and no internet needed.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page section {
+    margin-top: 2.5rem;
+  }
+  .page li {
+    margin-bottom: 0.5rem;
+  }
+  .defs > div + div {
+    margin-top: 0.85rem;
+  }
+  .defs dt {
+    font-weight: 700;
+  }
+  .defs dd {
+    margin: 0.2rem 0 0;
+  }
+</style>

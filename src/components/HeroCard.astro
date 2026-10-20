@@ -27,7 +27,7 @@ const world = worldByNumber(hero.world);
       </div>
     )
   }
-  <h3><a href={url(`heroes/${hero.id}/`)}>{hero.name}</a></h3>
+  <h3><a href={url(`chapter-1/heroes/${hero.id}/`)}>{hero.name}</a></h3>
   <p class="meta">
     Moves from <cite>{hero.from}</cite>.{SHOW_CAMPAIGN && ` World ${hero.world}: ${world?.title}.`}
   </p>
