@@ -10,7 +10,7 @@ The plan for **Super Mario Bros. Crossover: REMIX** has changed, and version 0.5
 ## Version 0.5.0: Classic mode
 
 The first full release is a **true remake of Super Mario Bros. Crossover 3.1.21**. Very little changes apart from our
-own original sprites and music. It has:
+own original sprites and music. (Exploding Rabbit logo © Jay Pavlina / Exploding Rabbit, used as a tribute in Classic mode; will be replaced on request.) It has:
 
 - the original's 10 heroes, plus Random;
 - skins as in the original, each bringing its own moves;
