@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageBanner from '../components/PageBanner.astro';
-import { MAP_SETS, DIFFICULTY, GAME_MODES, WEAPONS, MORE_SETTINGS, CHEATS, shown } from '../data/classic';
+import { MAP_SETS, CLASSIC_MENU, DIFFICULTY, GAME_MODES, WEAPONS, MORE_SETTINGS, CHEATS, shown } from '../data/classic';
 import { url } from '../lib';
 ---
 
@@ -24,6 +24,11 @@ import { url } from '../lib';
           ))
         }
       </div>
+    </section>
+
+    <section aria-labelledby="menu">
+      <h2 id="menu">The Classic menu and options</h2>
+      <ul>{shown(CLASSIC_MENU).map((m) => <li>{m.text}</li>)}</ul>
     </section>
 
     <section aria-labelledby="difficulty">
