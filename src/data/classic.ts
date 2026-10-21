@@ -395,16 +395,15 @@ export const MAP_SETS: { name: string; text: string; later?: boolean }[] = [
   },
   {
     name: 'SMB Special',
-    text: '32 new levels (Worlds 1-1 to 8-4), built for each hero and each difficulty, with new enemies that can’t be stomped (Icicles, Crabs, Flies, Barrels and living Flames), new items (the Atom, the Hammer and the Wing), a full power-up, and numbered vines to bonus rooms.',
-    later: true,
+    text: '32 new levels (Worlds 1-1 to 8-4), built for each hero and each difficulty, ending with the credits as Super Mario Bros. does. New enemies that can’t be stomped: Icicles that drop when you come near, Crabs that get angry when hit, hopping Flies, rolling armoured Barrels and living Flames that only a Star or the Hammer puts out (a few on Easy and Normal, many more on Hard). New items in blocks: the Atom defeats every enemy on screen, the Hammer swings around you for ten seconds, and the Wing lets you swim through the air for ten seconds. Plus a full power-up, and numbered vines to bonus rooms.',
   },
 ];
 
 export const DIFFICULTY: Note[] = [
   { text: 'Each difficulty plays the original’s own version of every level, with other enemies and blocks.' },
-  { text: 'Easy and Hard give the castles their checkpoints.' },
+  { text: 'Easy and Hard give the castles their checkpoints, and add the original’s Clocks and Atoms to Super Mario Bros. and The Lost Levels.' },
   {
-    text: 'On Hard, Lakitu comes back sooner and keeps more Spinies out at once, more flying Cheep Cheeps leap at a time, and a hidden Hudson Bee can be found. Easy is the reverse.',
+    text: 'On Hard, Lakitu comes back sooner and keeps more Spinies out at once, more flying Cheep Cheeps leap at a time, and a hidden Hudson Bee can be found. Easy is the reverse. Special’s new enemies turn up in Super Mario Bros. and The Lost Levels on Hard too.',
   },
   { text: 'A beaten map set remembers the difficulty it was beaten on.' },
 ];
@@ -459,7 +458,7 @@ export const MORE_SETTINGS: { name: string; text: string }[] = [
 
 export const CHEATS: { name: string; does: string; unlock: string; later?: boolean }[] = [
   { name: 'All Ground Is Bricks', does: 'Ground and blocks before the goal become bricks', unlock: 'Beat Super Mario Bros.' },
-  { name: 'All Hammer Bros', does: 'Every enemy but Bowser is a Hammer Bro', unlock: 'Beat The Lost Levels' },
+  { name: 'All Hammer Bros', does: 'Every enemy but Bowser is a Hammer Bro', unlock: 'Beat SMB Special (if you already unlocked it, you keep it)' },
   { name: 'All Weapons Pierce', does: 'Every attack gets through armour', unlock: 'Beat a game and defeat 200 armoured enemies' },
   { name: 'Always Break Bricks', does: 'Any bump breaks a plain brick', unlock: 'Beat a game and break 1000 bricks' },
   { name: 'Bouncy Pits', does: 'Pits bounce heroes and enemies back up', unlock: 'Beat a game and stomp 200 enemies' },
@@ -487,11 +486,11 @@ export const CHEATS: { name: string; does: string; unlock: string; later?: boole
 export const ACCESSIBILITY: { name: string; text: string }[] = [
   {
     name: 'Reduce flash',
-    text: 'Steady colours instead of flashing: the Star, hurt and Bowser flashes, the select cursor, lightning and Bill’s pick flash, under both Classic and Current rules. Under Current rules the hurt blink is held steady too: the hero stays drawn, see-through.',
+    text: 'Steady colours instead of flashing: the Star, hurt and Bowser flashes, the select cursor, lightning, Bill’s pick flash and the Hammer’s swing (drawn steady on both sides), under both Classic and Current rules. Under Current rules the hurt blink is held steady too: the hero stays drawn, see-through.',
   },
   {
     name: 'Announce',
-    text: 'Screen-reader announcements: menus, cards, the hero select (look, hero and game) and unlocks are all read out.',
+    text: 'Screen-reader announcements: menus, cards, the hero select (look, hero and game), and unlocks are all read out, and the whole credits roll is read at once as it starts.',
   },
   { name: 'Palette', text: 'Default, Deuteranopia, Protanopia, Tritanopia or High contrast.' },
   { name: 'Integer scale', text: 'Crisp pixel scaling.' },
