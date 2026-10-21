@@ -63,7 +63,6 @@ export const CLASSIC_HEROES: ClassicHero[] = [
       {
         name: 'SMB3 Mario',
         note: 'Our own Super Mario Bros. 3-style palette. Plays as Mario, except that small Mario can duck and crouch-jump.',
-        later: true,
       },
     ],
   },
@@ -85,13 +84,11 @@ export const CLASSIC_HEROES: ClassicHero[] = [
       {
         name: 'SMB3 Luigi',
         note: 'Plays as Luigi, except that small Luigi can duck and crouch-jump.',
-        later: true,
       },
     ],
     notes: [
       {
         text: 'Princess Peach plays exactly as Luigi, with his moves and fireballs, and 8-4 ends as in the original: “THANK YOU TOADSTOOL! YOUR QUEST IS OVER.”',
-        later: true,
       },
     ],
   },
@@ -123,7 +120,6 @@ export const CLASSIC_HEROES: ClassicHero[] = [
       {
         name: 'Princess Zelda (NES, SNES and Game Boy looks)',
         note: 'Her sword is weaker, and her arrows are stronger and go on through what they defeat.',
-        later: true,
       },
     ],
   },
@@ -154,7 +150,10 @@ export const CLASSIC_HEROES: ClassicHero[] = [
       },
       { name: 'Dark Pit (Kid Icarus: Uprising)', note: 'Plays as Pit.' },
     ],
-    notes: [{ text: 'The Classic Samus cheat (see Maps & modes).', later: true }],
+    notes: [
+      { text: 'Pit and Dark Pit die with Samus’s burst, in their own colours.' },
+      { text: 'The Classic Samus cheat (see Maps & modes).' },
+    ],
   },
   {
     id: 'simon',
@@ -180,7 +179,7 @@ export const CLASSIC_HEROES: ClassicHero[] = [
       { label: 'Ammo', text: 'Hearts, small and large.' },
     ],
     looks: [{ name: 'Simon' }],
-    notes: [{ text: 'The Classic Simon cheat (see Maps & modes).', later: true }],
+    notes: [{ text: 'The Classic Simon cheat (see Maps & modes).' }],
   },
   {
     id: 'megaman',
@@ -219,7 +218,7 @@ export const CLASSIC_HEROES: ClassicHero[] = [
       { name: 'Doropie (The Krion Conquest)', note: 'Francesca’s other look, with the same rules.' },
       { name: 'Rokko Chan (Rokko Chan)', note: 'An upright dash in place of the slide, and a dash jump that keeps its speed; can’t charge.' },
     ],
-    notes: [{ text: 'Mega Man and his looks die in a burst of energy orbs, with his own sound, as in the original.', later: true }],
+    notes: [{ text: 'Mega Man and his looks die in a burst of energy orbs, with his own sound, as in the original.' }],
   },
   {
     id: 'bass',
@@ -242,14 +241,14 @@ export const CLASSIC_HEROES: ClassicHero[] = [
     ],
     looks: [
       { name: 'Bass' },
-      { name: 'Dr. Wily (Mega Man 2)', note: 'Plays as Bass.', later: true },
-      { name: 'Mr. X (Mega Man 6)', note: 'Plays as Bass.', later: true },
-      { name: 'Quick Man (Mega Man 2)', note: 'Faster, with the higher jump, but no double jump or dash.', later: true },
-      { name: 'Dr. Cossack (Mega Man 4)', note: 'Plays as Bass.', later: true },
-      { name: 'Gemini Man (Mega Man 3)', note: 'Plays as Bass.', later: true },
-      { name: 'Skull Man (Mega Man 4)', note: 'Plays as Bass.', later: true },
+      { name: 'Dr. Wily (Mega Man 2)', note: 'Plays as Bass.' },
+      { name: 'Mr. X (Mega Man 6)', note: 'Plays as Bass.' },
+      { name: 'Quick Man (Mega Man 2)', note: 'Faster, with the higher jump, but no double jump or dash.' },
+      { name: 'Dr. Cossack (Mega Man 4)', note: 'Plays as Bass.' },
+      { name: 'Gemini Man (Mega Man 3)', note: 'Plays as Bass.' },
+      { name: 'Skull Man (Mega Man 4)', note: 'Plays as Bass.' },
     ],
-    notes: [{ text: 'Bass dies in a burst of energy orbs, as in the original.', later: true }],
+    notes: [{ text: 'Bass dies in a burst of energy orbs, as in the original.' }],
   },
   {
     id: 'bill',
@@ -291,7 +290,7 @@ export const CLASSIC_HEROES: ClassicHero[] = [
       { label: 'Star', text: `${STAR_12} Ninpo costs nothing.` },
       { label: 'Ammo', text: 'Ninpo flames. A hit takes the sword and the Flower, but he keeps the Scroll and his ninpo.' },
     ],
-    looks: [{ name: 'Ryu' }, { name: 'Haggle Man (Haggle Man)', note: 'His sword hits sooner.', later: true }],
+    looks: [{ name: 'Ryu' }, { name: 'Haggle Man (Haggle Man)', note: 'His sword hits sooner.' }],
   },
   {
     id: 'sophia',
@@ -321,7 +320,7 @@ export const CLASSIC_HEROES: ClassicHero[] = [
 
 export const RANDOM: Note[] = [
   { text: 'The game picks one of the heroes you can pick, in that hero’s chosen look.' },
-  { text: 'Disable heroes also takes heroes out of Random.', later: true },
+  { text: 'Disable heroes also takes heroes out of Random.' },
 ];
 
 /** How the select and every hero work. */
@@ -338,7 +337,6 @@ export const HERO_RULES: Note[] = [
   },
   {
     text: 'A picked hero acts out a short move in their cell before the game goes on (Mario hops, Mega Man teleports away, Bill flashes). OK or Back skips it.',
-    later: true,
   },
 ];
 
@@ -411,6 +409,19 @@ export const DIFFICULTY: Note[] = [
   { text: 'A beaten map set remembers the difficulty it was beaten on.' },
 ];
 
+/** The Classic menu and other options. */
+export const CLASSIC_MENU: Note[] = [
+  {
+    text: 'Continue, at the top of the Classic menu, picks your last run up at the start of the level you reached, with its lives, score, coins, hero and power (Survival’s fallen heroes too). A game over or the credits end it.',
+  },
+  {
+    text: 'Options → Disable heroes, the original’s Disable characters: a hero turned off leaves the select, Random and Single random. One hero always stays on.',
+  },
+  {
+    text: 'The pause menu has a Guide row for the hero you’re playing, and a Cheats row that turns unlocked cheats on or off mid-run (Water Mode floods the level at once).',
+  },
+];
+
 export const GAME_MODES: { name: string; text: string }[] = [
   { name: 'All heroes (default)', text: 'Choose a hero before every level and after every lost life.' },
   {
@@ -465,20 +476,18 @@ export const CHEATS: { name: string; does: string; unlock: string; later?: boole
     name: 'Classic Samus',
     does: 'Special or Tools switches her between beam and missiles, and Down rolls her straight into the morph ball',
     unlock: 'Open from the start',
-    later: true,
   },
   {
     name: 'Classic Simon',
     does: 'His jump keeps its take-off direction, and he drops straight down off ledges',
     unlock: 'Open from the start',
-    later: true,
   },
 ];
 
 export const ACCESSIBILITY: { name: string; text: string }[] = [
   {
     name: 'Reduce flash',
-    text: 'Steady colours instead of flashing: the Star, hurt and Bowser flashes, the select cursor and lightning.',
+    text: 'Steady colours instead of flashing: the Star, hurt and Bowser flashes, the select cursor, lightning and Bill’s pick flash, under both Classic and Current rules. Under Current rules the hurt blink is held steady too: the hero stays drawn, see-through.',
   },
   {
     name: 'Announce',
@@ -488,12 +497,12 @@ export const ACCESSIBILITY: { name: string; text: string }[] = [
   { name: 'Integer scale', text: 'Crisp pixel scaling.' },
   {
     name: 'Remapping',
-    text: 'Every ability can be remapped on the keyboard and on a gamepad, and Reset keys restores the defaults.',
+    text: 'Every ability can be remapped on the keyboard and on a gamepad, and Reset keys restores the defaults. Remapping never leaves one key on two abilities: a key that is another ability’s only key is refused, and you’re asked for another.',
   },
   { name: 'Key hints', text: 'Shows each ability with its key beside the game.' },
   { name: 'Audio', text: 'Mute, plus Master, Music and Sound volumes.' },
   {
     name: 'Cards wait for you',
-    text: 'Every text card waits for a press, and ignores presses for its first half second. The one exception is the short WORLD card before each level, which moves on by itself after about two seconds, as in the original; it is announced, and shows nothing that isn’t also on screen during play.',
+    text: 'Every text card waits for a press, and ignores presses for its first half second. The one exception is the short WORLD card before each level, which moves on by itself after about two seconds, as in the original; it is announced, shows nothing that isn’t also on screen during play, and a fresh Jump, Attack or Pause press (on touch, the SKIP button) skips it.',
   },
 ];
