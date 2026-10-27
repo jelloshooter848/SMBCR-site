@@ -10,9 +10,12 @@ on:
 permissions:
   contents: read
 
+# A pull request's newer push cancels its older run. On main, runs wait for each other instead,
+# and each one builds main's latest commit (below), so the last deploy is always the newest site
+# even when two merges start their runs out of order.
 concurrency:
   group: pages-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   # Repo variables (Settings → Secrets and variables → Actions → Variables) for a custom domain.
@@ -24,6 +27,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref == 'refs/heads/main' && 'main' || '' }}
 
       - uses: actions/setup-node@v4
         with:
