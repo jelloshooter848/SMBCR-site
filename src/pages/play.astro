@@ -5,13 +5,18 @@ import { GAME, SHOW_CAMPAIGN } from '../config';
 import { media, url } from '../lib';
 ---
 
-<Base title="Play" description="Play Super Mario Bros. Crossover: REMIX right here in your browser, or full screen.">
+<Base title="Play" description="Play Super Mario Bros. Crossover: REMIX full screen in your browser, or right here in the page.">
   <div class="wrap play">
     <h1>Play</h1>
     <p class="lede">
-      Free, no install. The game saves to your browser, and the version here and the full-screen one share the same save
-      files.
+      Free, no install. <strong>Play</strong> opens the game on its own page: the best way to play, and the only one
+      that lets a phone or tablet add the game to its Home Screen. You can also play it in this page below; both share
+      the same save files.
     </p>
+    <div class="btn-row">
+      <a class="btn btn--red btn--play" href={GAME.playUrl}>▶ Play</a>
+      <a class="btn btn--blue" href={url('versions/')}>Older versions</a>
+    </div>
 
     <div class="player" data-player data-src={GAME.playUrl}>
       <div class="player__start" data-player-start>
@@ -22,16 +27,14 @@ import { media, url } from '../lib';
             <img src={media('logo-remix.png')} alt="" width="470" height="180" />
           )
         }
-        <button class="btn btn--red btn--play" type="button" data-player-button hidden>▶ Start the game here</button>
+        <button class="btn btn--play" type="button" data-player-button hidden>▶ Play in this page</button>
         <noscript>
-          <a class="btn btn--red btn--play" href={GAME.playUrl}>▶ Play full screen</a>
+          <a class="btn btn--red btn--play" href={GAME.playUrl}>▶ Play</a>
         </noscript>
       </div>
     </div>
 
     <div class="btn-row">
-      <a class="btn" href={GAME.playUrl}>Play full screen</a>
-      <a class="btn btn--blue" href={url('versions/')}>Older versions</a>
       <button class="btn btn--blue" type="button" data-player-fullscreen hidden>Fill the screen</button>
     </div>
     <p class="notice" data-player-status aria-live="polite" hidden></p>
@@ -54,8 +57,8 @@ import { media, url } from '../lib';
         </li>
         <li><strong>Gamepad:</strong> plug it in and press a button. Standard layout.</li>
         <li>
-          <strong>Phone or tablet:</strong> touch controls appear on their own. Full screen is roomier, so the{' '}
-          <em>Play full screen</em> button is the better pick on a small screen.
+          <strong>Phone or tablet:</strong> touch controls appear on their own. Use <em>Play</em>, then the
+          browser's Share or menu button and <em>Add to Home Screen</em>, and the game opens like an app.
         </li>
         <li>
           <strong>Accessibility:</strong> Options on the title screen lets you remap the controls, reduce flashing, pick a
