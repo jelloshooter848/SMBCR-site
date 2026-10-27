@@ -50,9 +50,9 @@ export const COMMUNITY = {
  */
 export const GISCUS = {
   repo: COMMUNITY.discussionsRepo,
-  repoId: 'OWNER_FILL_IN_REPO_ID',
-  category: 'General',
-  categoryId: 'OWNER_FILL_IN_CATEGORY_ID',
+  repoId: 'R_kgDOU2DbsQ',
+  category: 'Site Comments',
+  categoryId: 'DIC_kwDOU2Dbsc4DJw19',
   /** One thread per page, matched by the page's path. */
   mapping: 'pathname',
   reactionsEnabled: '1',
