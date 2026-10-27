@@ -35,7 +35,6 @@ body:
         - Ryu
         - Sophia III
         - Random
-        - An Expansion hero (Vic Viper, Warriors of Light, Arthur, Yoshi)
         - Not in a level (menus, select, editor)
     validations:
       required: true

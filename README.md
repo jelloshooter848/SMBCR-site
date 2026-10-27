@@ -16,7 +16,7 @@ the game repo's issues, and the latest release is read from the GitHub API in th
 | ----------- | ---------------------------------------------------------------------------------------------- |
 | `/`         | Banner, PLAY button, pitch, clips, features, heroes, latest release                            |
 | `/play/`    | The game embedded in the page (loads on click), full-screen button, tips, download             |
-| `/heroes/`  | The Classic heroes (the original's ten, Random and the Expansion heroes), a page each with moves, power-ups and looks |
+| `/heroes/`  | The Classic heroes (the original's ten and Random), a page each with moves, power-ups and looks |
 | `/modes/`   | Maps & modes: map sets, difficulty, game modes, rules, Weapons, More settings, cheats, music |
 | `/how-to-play/` | Getting started, abilities, keyboard, gamepad and touch, accessibility options |
 | `/versions/` | Every major and minor release of the game (vX.Y.0), playable in the browser, and how to play a zip offline |
@@ -108,7 +108,7 @@ comes out.
 
 ## Change Classic content
 
-Classic mode's heroes, looks, Expansion heroes, maps, modes, cheats and accessibility options are in
+Classic mode's heroes, looks, maps, modes, cheats and accessibility options are in
 [`src/data/classic.ts`](src/data/classic.ts). Anything built in the game but due in a later 0.5.0 batch is marked
 `later: true` and stays off the site until it ships: remove its flag then (or set `SHOW_UPCOMING`).
 
