@@ -445,7 +445,8 @@ main {
 }
 
 .page-banner {
-  padding: 2.5rem 0 2rem;
+  /* Top and bottom only: the sides keep .wrap's gutter. */
+  padding-block: 2.5rem 2rem;
 }
 
 .page-banner h1 {
