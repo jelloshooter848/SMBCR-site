@@ -36,9 +36,10 @@ const fmt = (d: Date) => d.toLocaleDateString('en', { year: 'numeric', month: 'l
     <section aria-labelledby="releases-title" data-releases data-api={GAME.releasesApi}>
       <h2 id="releases-title">Release notes</h2>
       <p>
-        Straight from the game's <a href={GAME.releasesUrl}>GitHub Releases</a>. Each release has an{' '}
-        <code>smbc-vX.Y.Z.zip</code> to <a href={url('versions/#offline')}>play offline</a>, and every major and minor
-        release is <a href={url('versions/')}>playable here</a>.
+        Straight from the game's <a href={GAME.releasesUrl}>GitHub Releases</a>. The newest release and each
+        minor release have zips to <a href={url('versions/#offline')}>play offline</a>{' '}
+        (<code>smbc-remix-vX.Y.Z-offline.zip</code>), and every major and minor release is{' '}
+        <a href={url('versions/')}>playable here</a>.
       </p>
       <p class="notice" data-releases-status aria-live="polite">
         Loading the latest releases… If nothing appears, read them on <a href={GAME.releasesUrl}>GitHub</a>.
@@ -83,7 +84,7 @@ const fmt = (d: Date) => d.toLocaleDateString('en', { year: 'numeric', month: 'l
 </style>
 
 <script>
-  import { releases, zipAsset, formatDate, formatSize, renderNotes } from '../../scripts/releases';
+  import { releases, zipAsset, offlineZipAsset, formatDate, formatSize, renderNotes } from '../../scripts/releases';
 
   const root = document.querySelector<HTMLElement>('[data-releases]');
   const status = root?.querySelector<HTMLElement>('[data-releases-status]');
@@ -101,7 +102,8 @@ const fmt = (d: Date) => d.toLocaleDateString('en', { year: 'numeric', month: 'l
         status.hidden = true;
         list.innerHTML = shown
           .map((r) => {
-            const zip = zipAsset(r);
+            // The offline zip is the one players want; older releases only have the site zip.
+            const zip = offlineZipAsset(r) ?? zipAsset(r);
             const title = esc(r.name || r.tag_name);
             return `<article class="panel">
               <h3><a href="${esc(r.html_url)}">${title}</a>${r.prerelease ? ' <span class="tag">Pre-release</span>' : ''}</h3>
