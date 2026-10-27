@@ -1,75 +1,268 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
-import { CLASSIC_HEROES, HERO_RULES, RANDOM, shown } from '../../data/classic';
-import { url } from '../../lib';
-
-const lookCount = (id: string) => shown(CLASSIC_HEROES.find((h) => h.id === id)?.looks ?? []).length;
+import Sprite from '../../components/Sprite.astro';
+import { CLASSIC_HEROES, RANDOM, clipLevelName, heroSprites, shown } from '../../data/classic';
+import { media, url } from '../../lib';
 ---
 
-<Base title="Heroes" description="The heroes of Super Mario Bros. Crossover: REMIX Classic mode: their moves, power-ups and looks.">
-  <PageBanner
-    title="Heroes"
-    intro="The original's ten heroes and a Random pick, each playing Super Mario Bros. with the moves of their own game."
-  />
+<Base title="Heroes" description="The heroes of Super Mario Bros. Crossover: REMIX Classic mode, their looks, and a clip of each one playing.">
+  <PageBanner title="Heroes" intro="The original's ten heroes and a Random pick. Pick a hero to watch them play." />
   <div class="wrap">
-    <section aria-labelledby="select-title">
-      <h2 id="select-title">The hero select</h2>
-      <p>Five heroes on the top row and six on the bottom, laid out as in the original.</p>
-      <ul class="rules">
-        {shown(HERO_RULES).map((r) => <li>{r.text}</li>)}
-      </ul>
-    </section>
-
-    <section aria-labelledby="roster-title">
-      <h2 id="roster-title">The heroes</h2>
-      <ul class="grid roster">
-        {
-          CLASSIC_HEROES.map((h) => (
+    <ul class="grid roster">
+      {
+        CLASSIC_HEROES.map((h) => {
+          const looks = heroSprites(h);
+          return (
             <li class="panel card" style={`--accent: ${h.color}`}>
-              <h3>
-                <a href={url(`heroes/${h.id}/`)}>{h.name}</a>
-              </h3>
-              <p>{h.tagline}.</p>
-              {lookCount(h.id) > 1 && <p class="meta">{lookCount(h.id)} looks</p>}
+              <a
+                class="card__open"
+                href={url(`heroes/${h.id}/`)}
+                data-clip={media(`classic/hero-${h.id}`)}
+                data-name={h.name}
+                data-tagline={h.tagline}
+                data-level={clipLevelName(h)}
+              >
+                <span class="card__art">
+                  <Sprite id={h.id} scale={3} />
+                </span>
+                <span class="card__name">{h.name}</span>
+                <span class="card__watch" aria-hidden="true">
+                  ▶ Watch
+                </span>
+              </a>
+              {looks.length > 1 && (
+                <ul class="looks" aria-label={`${h.name}'s looks`}>
+                  {looks.map((l) => (
+                    <li>
+                      <Sprite id={l.id} scale={2} alt={l.name} />
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
-          ))
-        }
-        <li class="panel card">
-          <h3>Random</h3>
-          {shown(RANDOM).map((r) => <p>{r.text}</p>)}
-        </li>
-      </ul>
-    </section>
-
+          );
+        })
+      }
+      <li class="panel card card--random">
+        <span class="card__art" aria-hidden="true"><span class="random-mark">?</span></span>
+        <span class="card__name">Random</span>
+        <p>{shown(RANDOM)[0]?.text}</p>
+      </li>
+    </ul>
   </div>
+
+  <dialog class="clip panel" aria-labelledby="clip-name" data-clip-dialog>
+    <h2 id="clip-name" data-clip-name>Hero</h2>
+    <p class="clip__tagline" data-clip-tagline></p>
+    <figure class="clip__video">
+      <video width="512" height="480" muted loop playsinline controls preload="none" data-clip-video></video>
+      <figcaption data-clip-level></figcaption>
+    </figure>
+    <ul class="looks looks--named" data-clip-looks></ul>
+    <div class="btn-row">
+      <a class="btn btn--blue" href={url('heroes/')} data-clip-more>Moves and looks</a>
+      <button class="btn" type="button" data-clip-close>Close</button>
+    </div>
+  </dialog>
 </Base>
 
 <style>
-  .rules li {
-    margin-bottom: 0.5rem;
-  }
   .roster {
     list-style: none;
     padding: 0;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   }
-  .roster .card {
+  /* Two heroes a row on a phone. */
+  @media (max-width: 500px) {
+    .roster {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+    .roster .card {
+      padding: 0.75rem;
+    }
+  }
+  .card {
     border-color: var(--accent, var(--panel-edge));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
-  .roster h3 {
-    margin: 0 0 0.5rem;
-  }
-  .roster h3 a {
+  .card__open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    width: 100%;
     color: var(--ink);
     text-decoration: none;
   }
-  .roster h3 a:hover {
+  .card__open:hover .card__name,
+  .card__open:focus-visible .card__name {
     color: var(--gold);
   }
-  .roster p {
-    margin: 0 0 0.5rem;
+  /* Room for the tallest hero (Bill, 34 px at 3x), every hero standing on the same line. */
+  .card__art {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    height: 108px;
   }
-  .meta {
+  .card__name {
+    font-family: var(--font-pixel);
+    font-size: 0.8rem;
+  }
+  .card__watch {
+    font-family: var(--font-pixel);
+    font-size: 0.6rem;
+    color: var(--gold);
+  }
+  /* The looks sit at the card's foot, so a row of cards lines them up. */
+  .card > .looks {
+    margin-top: auto;
+    padding-top: 1rem;
+  }
+  .card--random p {
+    margin: 0.6rem 0 0;
+  }
+  .random-mark {
+    font-family: var(--font-pixel);
+    font-size: 3.5rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .looks {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+  /* The window's looks: a grid of sprite-over-name cells, every sprite on the same line. */
+  .looks--named {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(6.5rem, 1fr));
+    gap: 1rem 0.5rem;
+  }
+  .looks--named :global(li) {
+    display: grid;
+    grid-template-rows: 68px auto;
+    justify-items: center;
+    align-items: end;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  .looks--named :global(li span) {
+    align-self: start;
+  }
+  .clip {
+    margin: auto;
+    width: min(560px, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    overflow-y: auto;
+    padding: 1.25rem;
+    color: var(--ink);
+  }
+  .clip::backdrop {
+    background: rgb(0 0 0 / 0.75);
+  }
+  .clip h2 {
+    margin-top: 0;
+  }
+  .clip__tagline {
+    margin: 0 0 1rem;
+  }
+  .clip__video {
+    margin: 0;
+  }
+  .clip__video video {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--black);
+    image-rendering: pixelated;
+  }
+  .clip__video figcaption {
+    margin-top: 0.4rem;
     color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .clip .btn-row {
+    margin-top: 1.25rem;
   }
 </style>
+
+<script>
+  // Each hero card opens the clip window instead of the hero's page (still a plain link without
+  // JavaScript). The clip loads only when the window opens, and stops when it closes.
+  const dialog = document.querySelector<HTMLDialogElement>('[data-clip-dialog]');
+  const $ = <T extends HTMLElement>(k: string) => dialog?.querySelector<T>(`[data-clip-${k}]`) ?? null;
+  const video = $<HTMLVideoElement>('video');
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  if (dialog && video && typeof dialog.showModal === 'function') {
+    const stop = () => {
+      video.pause();
+      video.removeAttribute('poster');
+      video.replaceChildren();
+      video.load();
+    };
+    for (const card of document.querySelectorAll<HTMLAnchorElement>('.card__open')) {
+      card.setAttribute('aria-haspopup', 'dialog');
+      card.addEventListener('click', (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return; // a new tab keeps the page
+        e.preventDefault();
+        const d = card.dataset;
+        const name = $('name');
+        if (name) name.textContent = d.name ?? '';
+        const tagline = $('tagline');
+        if (tagline) tagline.textContent = d.tagline ? `${d.tagline}.` : '';
+        const level = $('level');
+        if (level) level.textContent = `${d.name} playing ${d.level}.`;
+        const more = $<HTMLAnchorElement>('more');
+        if (more) {
+          more.href = card.href;
+          more.textContent = `${d.name}: moves and looks`;
+        }
+        // The card's looks, each with its name under it.
+        const looks = $('looks');
+        if (looks) {
+          looks.replaceChildren(
+            ...[...(card.parentElement?.querySelectorAll<HTMLImageElement>('.looks img') ?? [])].map((img) => {
+              const li = document.createElement('li');
+              const span = document.createElement('span');
+              span.textContent = img.alt;
+              const copy = img.cloneNode() as HTMLImageElement;
+              copy.alt = '';
+              copy.removeAttribute('title');
+              li.append(copy, span);
+              return li;
+            }),
+          );
+        }
+        video.poster = `${d.clip}.png`;
+        video.replaceChildren(
+          Object.assign(document.createElement('source'), { src: `${d.clip}.webm`, type: 'video/webm' }),
+          Object.assign(document.createElement('source'), { src: `${d.clip}.mp4`, type: 'video/mp4' }),
+        );
+        video.load();
+        dialog.showModal();
+        if (!still.matches) void video.play().catch(() => {});
+      });
+    }
+    $('close')?.addEventListener('click', () => dialog.close());
+    // A click on the backdrop (outside the window's box) closes it too.
+    dialog.addEventListener('click', (e) => {
+      const r = dialog.getBoundingClientRect();
+      const inside = e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom;
+      if (!inside) dialog.close();
+    });
+    dialog.addEventListener('close', stop);
+  }
+</script>

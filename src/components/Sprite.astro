@@ -1,0 +1,39 @@
+---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { media } from '../lib';
+
+/**
+ * A Classic hero or look's select art (public/media/classic/sprites/<id>.png, from
+ * tools/capture/classic-sprites.mjs), scaled by a whole number so its pixels stay crisp.
+ */
+interface Props {
+  id: string;
+  scale?: number;
+  alt?: string;
+  class?: string;
+}
+const { id, scale = 3, alt = '', class: cls } = Astro.props;
+// A PNG's size is in its IHDR chunk: width at byte 16, height at byte 20.
+const png = readFileSync(join(process.cwd(), 'public/media/classic/sprites', `${id}.png`));
+const w = png.readUInt32BE(16);
+const h = png.readUInt32BE(20);
+---
+
+<img
+  class:list={['sprite', cls]}
+  src={media(`classic/sprites/${id}.png`)}
+  width={w * scale}
+  height={h * scale}
+  alt={alt}
+  title={alt || undefined}
+  loading="lazy"
+  decoding="async"
+/>
+
+<style>
+  .sprite {
+    image-rendering: pixelated;
+    max-width: none;
+  }
+</style>

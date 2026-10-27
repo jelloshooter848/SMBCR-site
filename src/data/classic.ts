@@ -22,6 +22,11 @@ export interface Look {
   name: string;
   /** What changes, if it plays differently. */
   note?: string;
+  /**
+   * Its select art, public/media/classic/sprites/<id>.png (the hero's own look: the hero's id), with
+   * a name of its own when one look has several.
+   */
+  sprites?: (string | { id: string; name: string })[];
   later?: boolean;
 }
 
@@ -35,16 +40,35 @@ export interface ClassicHero {
   looks: Look[];
   /** Notes under the looks. */
   notes?: Note[];
+  /** The level its Heroes page clip is recorded in (tools/capture/classic-clips.mjs); 1-1 if unset. */
+  clipLevel?: string;
 }
 
 export const shown = <T extends { later?: boolean }>(items: readonly T[]): T[] =>
   items.filter((i) => SHOW_UPCOMING || !i.later);
+
+/** A look's select art, each with its name: its own sprites, or for the hero's first look the hero's. */
+export const lookSprites = (hero: ClassicHero, look: Look): { id: string; name: string }[] =>
+  (look.sprites ?? (hero.looks[0] === look ? [hero.id] : [])).map((s) =>
+    typeof s === 'string' ? { id: s, name: look.name } : s,
+  );
+
+/** Every sprite of the hero's shown looks. */
+export const heroSprites = (hero: ClassicHero): { id: string; name: string }[] =>
+  shown(hero.looks).flatMap((l) => lookSprites(hero, l));
+
+/** The level a hero's clip plays, as the game names it: "World 1-1", "SMB Special 1-1". */
+export const clipLevelName = (hero: ClassicHero): string => {
+  const level = hero.clipLevel ?? '1-1';
+  return level.startsWith('sp-') ? `SMB Special ${level.slice(3)}` : `World ${level}`;
+};
 
 const STAR_12 = 'Twelve seconds of invincibility.';
 
 export const CLASSIC_HEROES: ClassicHero[] = [
   {
     id: 'mario',
+    clipLevel: '1-1',
     name: 'Mario',
     tagline: 'The original plumber, with a sharp rocket jump',
     color: '#d82800',
@@ -61,13 +85,14 @@ export const CLASSIC_HEROES: ClassicHero[] = [
     looks: [
       { name: 'Mario' },
       {
-        name: 'SMB3 Mario',
+        name: 'SMB3 Mario', sprites: ['mario3'],
         note: 'Our own Super Mario Bros. 3-style palette. Plays as Mario, except that small Mario can duck and crouch-jump.',
       },
     ],
   },
   {
     id: 'luigi',
+    clipLevel: '5-1',
     name: 'Luigi',
     tagline: 'Slippery, and floats high',
     color: '#00a800',
@@ -80,9 +105,9 @@ export const CLASSIC_HEROES: ClassicHero[] = [
     ],
     looks: [
       { name: 'Luigi' },
-      { name: 'Princess Peach', note: 'A look for Luigi, as in the original.' },
+      { name: 'Princess Peach', sprites: ['peach'], note: 'A look for Luigi, as in the original.' },
       {
-        name: 'SMB3 Luigi',
+        name: 'SMB3 Luigi', sprites: ['luigi3'],
         note: 'Plays as Luigi, except that small Luigi can duck and crouch-jump.',
       },
     ],
@@ -94,6 +119,7 @@ export const CLASSIC_HEROES: ClassicHero[] = [
   },
   {
     id: 'link',
+    clipLevel: '2-1',
     name: 'Link',
     tagline: 'Stab, thrust and boomerang',
     color: '#00a800',
@@ -118,13 +144,18 @@ export const CLASSIC_HEROES: ClassicHero[] = [
     looks: [
       { name: 'Link' },
       {
-        name: 'Princess Zelda (NES, SNES and Game Boy looks)',
+        name: 'Princess Zelda (NES, SNES and Game Boy looks)', sprites: [
+          { id: 'zelda-nes', name: 'Princess Zelda (NES)' },
+          { id: 'zelda-snes', name: 'Princess Zelda (SNES)' },
+          { id: 'zelda-gb', name: 'Princess Zelda (Game Boy)' },
+        ],
         note: 'Her sword is weaker, and her arrows are stronger and go on through what they defeat.',
       },
     ],
   },
   {
     id: 'samus',
+    clipLevel: '4-1',
     name: 'Samus',
     tagline: 'Beams, missiles and bombs',
     color: '#e45c10',
@@ -145,10 +176,10 @@ export const CLASSIC_HEROES: ClassicHero[] = [
     looks: [
       { name: 'Samus' },
       {
-        name: 'Pit (Kid Icarus)',
+        name: 'Pit (Kid Icarus)', sprites: ['pit'],
         note: 'Samus’s rules, but walks and jumps while crouched (fitting one-tile gaps), can’t walk while aiming up, fires no beam while crouched (missiles still fire), shoots lower, and has no morph ball or bombs. Shots fly as arrows.',
       },
-      { name: 'Dark Pit (Kid Icarus: Uprising)', note: 'Plays as Pit.' },
+      { name: 'Dark Pit (Kid Icarus: Uprising)', sprites: ['darkpit'], note: 'Plays as Pit.' },
     ],
     notes: [
       { text: 'Pit and Dark Pit die with Samus’s burst, in their own colours.' },
@@ -157,6 +188,7 @@ export const CLASSIC_HEROES: ClassicHero[] = [
   },
   {
     id: 'simon',
+    clipLevel: '1-4',
     name: 'Simon',
     tagline: 'Whip, axe and a double jump',
     color: '#ac7c00',
@@ -183,6 +215,7 @@ export const CLASSIC_HEROES: ClassicHero[] = [
   },
   {
     id: 'megaman',
+    clipLevel: '3-1',
     name: 'Mega Man',
     tagline: 'Mega Buster, slide and Rush',
     color: '#0070ec',
@@ -205,23 +238,24 @@ export const CLASSIC_HEROES: ClassicHero[] = [
     ],
     looks: [
       { name: 'Mega Man' },
-      { name: 'Rock', note: 'Can’t charge or slide.' },
+      { name: 'Rock', sprites: ['rock'], note: 'Can’t charge or slide.' },
       {
-        name: 'Proto Man (Mega Man 3)',
+        name: 'Proto Man (Mega Man 3)', sprites: ['protoman'],
         note: 'Charges from the start (even small), fires two shots at a time until the Mushroom, is knocked back twice as far, and shoots a little lower. He whistles when picked.',
       },
-      { name: 'Break Man (Mega Man 3)', note: 'Plays exactly as Proto Man, without the whistle.' },
-      { name: 'Cut Man', note: 'Shots pass through enemies, walls and bricks; his head breaks bricks even when small; two shots at a time.' },
-      { name: 'Fire Man', note: 'Stronger shots, two at a time; firebars pass through him; double knockback.' },
-      { name: 'Ice Man', note: 'A full charge freezes enemies; normal shots are weaker.' },
-      { name: 'Francesca (The Krion Conquest)', note: 'Can’t slide.' },
-      { name: 'Doropie (The Krion Conquest)', note: 'Francesca’s other look, with the same rules.' },
-      { name: 'Rokko Chan (Rokko Chan)', note: 'An upright dash in place of the slide, and a dash jump that keeps its speed; can’t charge.' },
+      { name: 'Break Man (Mega Man 3)', sprites: ['breakman'], note: 'Plays exactly as Proto Man, without the whistle.' },
+      { name: 'Cut Man', sprites: ['cutman'], note: 'Shots pass through enemies, walls and bricks; his head breaks bricks even when small; two shots at a time.' },
+      { name: 'Fire Man', sprites: ['fireman'], note: 'Stronger shots, two at a time; firebars pass through him; double knockback.' },
+      { name: 'Ice Man', sprites: ['iceman'], note: 'A full charge freezes enemies; normal shots are weaker.' },
+      { name: 'Francesca (The Krion Conquest)', sprites: ['francesca'], note: 'Can’t slide.' },
+      { name: 'Doropie (The Krion Conquest)', sprites: ['doropie'], note: 'Francesca’s other look, with the same rules.' },
+      { name: 'Rokko Chan (Rokko Chan)', sprites: ['rokko'], note: 'An upright dash in place of the slide, and a dash jump that keeps its speed; can’t charge.' },
     ],
     notes: [{ text: 'Mega Man and his looks die in a burst of energy orbs, with his own sound, as in the original.' }],
   },
   {
     id: 'bass',
+    clipLevel: '7-1',
     name: 'Bass',
     tagline: 'Rapid fire, dash and a double jump',
     color: '#7c7c7c',
@@ -241,17 +275,18 @@ export const CLASSIC_HEROES: ClassicHero[] = [
     ],
     looks: [
       { name: 'Bass' },
-      { name: 'Dr. Wily (Mega Man 2)', note: 'Plays as Bass.' },
-      { name: 'Mr. X (Mega Man 6)', note: 'Plays as Bass.' },
-      { name: 'Quick Man (Mega Man 2)', note: 'Faster, with the higher jump, but no double jump or dash.' },
-      { name: 'Dr. Cossack (Mega Man 4)', note: 'Plays as Bass.' },
-      { name: 'Gemini Man (Mega Man 3)', note: 'Plays as Bass.' },
-      { name: 'Skull Man (Mega Man 4)', note: 'Plays as Bass.' },
+      { name: 'Dr. Wily (Mega Man 2)', sprites: ['wily'], note: 'Plays as Bass.' },
+      { name: 'Mr. X (Mega Man 6)', sprites: ['mrx'], note: 'Plays as Bass.' },
+      { name: 'Quick Man (Mega Man 2)', sprites: ['quickman'], note: 'Faster, with the higher jump, but no double jump or dash.' },
+      { name: 'Dr. Cossack (Mega Man 4)', sprites: ['cossack'], note: 'Plays as Bass.' },
+      { name: 'Gemini Man (Mega Man 3)', sprites: ['gemini'], note: 'Plays as Bass.' },
+      { name: 'Skull Man (Mega Man 4)', sprites: ['skullman'], note: 'Plays as Bass.' },
     ],
     notes: [{ text: 'Bass dies in a burst of energy orbs, as in the original.' }],
   },
   {
     id: 'bill',
+    clipLevel: '6-1',
     name: 'Bill',
     tagline: 'Two guns and slow shots',
     color: '#3cbcfc',
@@ -269,6 +304,7 @@ export const CLASSIC_HEROES: ClassicHero[] = [
   },
   {
     id: 'ryu',
+    clipLevel: '8-1',
     name: 'Ryu',
     tagline: 'Climbs walls and throws ninpo arts',
     color: '#4040ff',
@@ -290,10 +326,11 @@ export const CLASSIC_HEROES: ClassicHero[] = [
       { label: 'Star', text: `${STAR_12} Ninpo costs nothing.` },
       { label: 'Ammo', text: 'Ninpo flames. A hit takes the sword and the Flower, but he keeps the Scroll and his ninpo.' },
     ],
-    looks: [{ name: 'Ryu' }, { name: 'Haggle Man (Haggle Man)', note: 'His sword hits sooner.' }],
+    looks: [{ name: 'Ryu' }, { name: 'Haggle Man (Haggle Man)', sprites: ['haggleman'], note: 'His sword hits sooner.' }],
   },
   {
     id: 'sophia',
+    clipLevel: 'sp-1-1',
     name: 'Sophia III',
     tagline: 'A tank that climbs walls and ceilings',
     color: '#fc7460',

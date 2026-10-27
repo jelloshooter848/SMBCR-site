@@ -16,7 +16,7 @@ the game repo's issues, and the latest release is read from the GitHub API in th
 | ----------- | ---------------------------------------------------------------------------------------------- |
 | `/`         | Banner, PLAY button, pitch, clips, features, heroes, latest release                            |
 | `/play/`    | The game embedded in the page (loads on click), full-screen button, tips, download             |
-| `/heroes/`  | The Classic heroes (the original's ten and Random), a page each with moves, power-ups and looks |
+| `/heroes/`  | The Classic heroes (the original's ten and Random) with their looks' sprites and a gameplay clip each; a page each with moves, power-ups and looks |
 | `/modes/`   | Maps & modes: map sets, difficulty, game modes, rules, Weapons, More settings, cheats, music |
 | `/how-to-play/` | Getting started, abilities, keyboard, gamepad and touch, accessibility options |
 | `/versions/` | Every major and minor release of the game (vX.Y.0), playable in the browser, and how to play a zip offline |
