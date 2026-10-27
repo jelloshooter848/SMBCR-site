@@ -3,6 +3,42 @@ import Base from '../layouts/Base.astro';
 import PageBanner from '../components/PageBanner.astro';
 import PixelArt from '../components/PixelArt.astro';
 import { GAME, SITE } from '../config';
+import { url } from '../lib';
+
+const features = [
+  {
+    icon: 'star',
+    title: 'The original ten heroes',
+    text: 'Mario, Luigi, Link, Samus, Simon, Mega Man, Bass, Bill, Ryu and Sophia III, plus Random, each with the moves of their own game.',
+  },
+  {
+    icon: 'heart',
+    title: 'Looks that play differently',
+    text: 'Each hero’s alternate looks, as in the original, and many of them play their own way.',
+  },
+  {
+    icon: 'qblock',
+    title: 'Three map sets',
+    text: 'Super Mario Bros., The Lost Levels played straight through from 1-1 to D-4, and the Special maps.',
+  },
+  {
+    icon: 'coin',
+    title: 'Easy, Normal or Hard',
+    text: 'Every map set at three difficulties, with the original’s options: More settings, Weapons, Cheats, Survival and per-hero music.',
+  },
+  {
+    icon: 'star',
+    title: 'Plays everywhere',
+    text: 'Keyboard, gamepad or touch, with remappable controls and accessibility options. Free, in your browser.',
+  },
+] as const;
+
+const roadmap = [
+  { version: '0.5.0', title: 'Classic mode', text: 'The first full release: the remake of the original, with our own art and music.' },
+  { version: '0.5.x', title: 'More looks', text: 'About 60 more of the original’s cosmetic looks.' },
+  { version: '0.6 – 0.9', title: 'New heroes', text: 'More heroes join the roster.' },
+  { version: '1.0', title: 'Chapter 1', text: 'The story campaign.' },
+];
 ---
 
 <Base title="About and credits" description="About Super Mario Bros. Crossover: REMIX, a tribute to Jay Pavlina's original, with credits and the fan-project disclaimer.">
@@ -24,6 +60,38 @@ import { GAME, SITE } from '../config';
       <p>
         Go and see where it started: <a href="https://github.com/JayPavlina/super-mario-bros-crossover">the original
         Super Mario Bros. Crossover source on GitHub</a>.
+      </p>
+    </section>
+
+    <section aria-labelledby="version">
+      <h2 id="version">What's in {GAME.launchVersion}</h2>
+      <ul class="grid features">
+        {features.map((f) => (
+          <li class="panel feature">
+            <PixelArt name={f.icon} scale={3} />
+            <h3>{f.title}</h3>
+            <p>{f.text}</p>
+          </li>
+        ))}
+      </ul>
+      <p>
+        <a href={url('heroes/')}>Meet the heroes</a> or explore the <a href={url('modes/')}>maps and modes</a>.
+      </p>
+    </section>
+
+    <section aria-labelledby="roadmap-title">
+      <h2 id="roadmap-title">What's next</h2>
+      <ol class="roadmap">
+        {roadmap.map((r) => (
+          <li class="panel">
+            <p class="tag">{r.version}</p>
+            <h3>{r.title}</h3>
+            <p>{r.text}</p>
+          </li>
+        ))}
+      </ol>
+      <p>
+        Every major and minor release so far is <a href={url('versions/')}>playable on this site</a>.
       </p>
     </section>
 
@@ -56,7 +124,7 @@ import { GAME, SITE } from '../config';
         The remake contains no Nintendo, Capcom, Konami or other third-party art, music or code. Every sprite and tile is
         original pixel art drawn in an NES style, and all music is original chiptune synthesized in your browser. The one
         exception is the original game's Exploding Rabbit logo, shown by Classic mode's full power-up in SMB Special:{' '}
-        <strong>Exploding Rabbit logo © Jay Pavlina / Exploding Rabbit, used as a tribute in Classic mode; will be replaced on request.</strong>
+        <strong>Exploding Rabbit logo © Jay Pavlina / Exploding Rabbit, used as a tribute in Classic mode; will be replaced on request.</strong>{' '}
         Character and game names are used only to describe gameplay styles. The game's code and original assets are
         released under the MIT license; see the <a href={GAME.repoUrl}>game repository</a>.
       </p>
@@ -87,6 +155,24 @@ import { GAME, SITE } from '../config';
   .prose-wide {
     max-width: 52rem;
     padding-top: 1rem;
+  }
+  .features,
+  .roadmap {
+    list-style: none;
+    padding: 0;
+  }
+  .feature h3,
+  .roadmap h3 {
+    margin: 0.75rem 0 0.5rem;
+    color: var(--gold);
+  }
+  .roadmap {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  }
+  .roadmap p:last-child {
+    margin-bottom: 0;
   }
   .credits dt {
     font-family: var(--font-pixel);

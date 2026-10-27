@@ -16,6 +16,7 @@
     "check": "npm run check:html && npm run check:links && npm run check:a11y",
     "capture": "node tools/capture/capture.mjs",
     "capture:classic": "node tools/capture/classic-clips.mjs",
+    "capture:difficulty": "node tools/capture/classic-difficulty.mjs",
     "capture:sprites": "node tools/capture/classic-sprites.mjs",
     "screenshots": "node tools/screenshots.mjs"
   },
