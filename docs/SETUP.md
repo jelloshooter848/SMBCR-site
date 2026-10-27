@@ -6,9 +6,9 @@ is in place. Allow about 15 minutes.
 
 ## Checklist
 
-- [ ] 1. Turn on GitHub Pages for this repo (Source: GitHub Actions)
-- [ ] 2. Turn on Discussions in the SMBC game repo
-- [ ] 3. Install giscus and fill in its ids in `src/config.ts`
+- [x] 1. Turn on GitHub Pages for this repo (Source: GitHub Actions)
+- [x] 2. Turn on Discussions in the SMBC game repo
+- [x] 3. Install giscus and fill in its ids in `src/config.ts`
 - [ ] 4. Copy the bug report form into the SMBC game repo
 - [ ] 5. (Optional) Add a custom domain
 
