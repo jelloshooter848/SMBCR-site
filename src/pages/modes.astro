@@ -1,19 +1,23 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageBanner from '../components/PageBanner.astro';
-import { MAP_SETS, CLASSIC_MENU, DIFFICULTY, GAME_MODES, WEAPONS, MORE_SETTINGS, CHEATS, shown } from '../data/classic';
-import { url } from '../lib';
+import Sprite from '../components/Sprite.astro';
+import { CLASSIC_HEROES, MAP_SETS, DIFFICULTY, GAME_MODES, WEAPONS, CHEATS, shown } from '../data/classic';
+import { media, url } from '../lib';
+
+const DIFFICULTIES = [
+  { id: 'easy', name: 'Easy' },
+  { id: 'normal', name: 'Normal' },
+  { id: 'hard', name: 'Hard' },
+];
+const heroName = (id: string) => CLASSIC_HEROES.find((h) => h.id === id)?.name ?? id;
 ---
 
-<Base title="Maps & modes" description="The map sets, difficulties, game modes, weapons, settings and cheats of Super Mario Bros. Crossover: REMIX Classic mode.">
-  <PageBanner
-    title="Maps & modes"
-    intro="Pick Classic on the title screen. The Classic menu lists the map sets, the map difficulty and the options."
-  />
+<Base title="Maps & modes" description="The map sets, difficulties, game modes, weapons and cheats of Super Mario Bros. Crossover: REMIX Classic mode.">
+  <PageBanner title="Maps & modes" intro="Pick Classic on the title screen, then a map set and a difficulty." />
   <div class="wrap page">
     <section aria-labelledby="sets">
       <h2 id="sets">Map sets</h2>
-      <p>Every map set is open from the start. Each one shows <strong>BEATEN</strong> once you've cleared it.</p>
       <div class="grid">
         {
           shown(MAP_SETS).map((m) => (
@@ -26,19 +30,37 @@ import { url } from '../lib';
       </div>
     </section>
 
-    <section aria-labelledby="menu">
-      <h2 id="menu">The Classic menu and options</h2>
-      <ul>{shown(CLASSIC_MENU).map((m) => <li>{m.text}</li>)}</ul>
-    </section>
-
     <section aria-labelledby="difficulty">
-      <h2 id="difficulty">Map difficulty: Easy, Normal, Hard</h2>
-      <ul>{DIFFICULTY.map((d) => <li>{d.text}</li>)}</ul>
+      <h2 id="difficulty">Easy, Normal or Hard</h2>
+      {DIFFICULTY.map((d) => <p>{d.text}</p>)}
+      <p>The same run through the start of World 1-1 at each difficulty:</p>
+      <div class="difficulties">
+        {
+          DIFFICULTIES.map((d) => (
+            <figure class="panel">
+              <video
+                width="512"
+                height="480"
+                muted
+                loop
+                playsinline
+                controls
+                preload="metadata"
+                poster={media(`classic/difficulty-${d.id}.png`)}
+                data-difficulty-clip
+              >
+                <source src={media(`classic/difficulty-${d.id}.webm`)} type="video/webm" />
+                <source src={media(`classic/difficulty-${d.id}.mp4`)} type="video/mp4" />
+              </video>
+              <figcaption>{d.name}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
     </section>
 
     <section aria-labelledby="modes">
       <h2 id="modes">Game modes</h2>
-      <p>In <strong>Options → Game mode</strong>.</p>
       <dl class="defs">
         {
           GAME_MODES.map((m) => (
@@ -51,62 +73,33 @@ import { url } from '../lib';
       </dl>
     </section>
 
-    <section aria-labelledby="rules">
-      <h2 id="rules">Classic rules</h2>
-      <p>
-        <strong>Options → Classic rules</strong> is on by default: the heroes play as in the original, with its power
-        states, physics and weapons, a camera that scrolls back left, and areas kept as you left them. Map difficulty, More
-        settings, Weapons and Cheats need these rules. The other choice, <strong>Current</strong>, gives the heroes health
-        bars and their own upgrades instead; with it every map plays on Normal and cheats are off.
-      </p>
-    </section>
-
     <section aria-labelledby="weapons">
       <h2 id="weapons">Weapons</h2>
-      <p>
-        <strong>Options → Weapons</strong>, the original's Customize Weapons, picks each hero's power-up weapon. The
-        original's choice (listed first) is the default, and <strong>Restore originals</strong> puts every row back.
-      </p>
-      <div class="table-wrap panel">
-        <table>
-          <caption class="visually-hidden">Weapon choices for each hero</caption>
-          <thead>
-            <tr><th scope="col">Hero (power-up)</th><th scope="col">Choices, default first</th></tr>
-          </thead>
-          <tbody>
-            {
-              WEAPONS.map((w) => (
-                <tr>
-                  <td>{w.row}</td>
-                  <td>{w.choices}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section aria-labelledby="more">
-      <h2 id="more">More settings</h2>
-      <p>With Classic rules. Each setting starts at the original's value; <strong>Restore originals</strong> resets them.</p>
-      <dl class="defs">
+      <p>Each hero's weapons. Pick one in <strong>Options → Weapons</strong>; the first is the original's.</p>
+      <ul class="grid weapons">
         {
-          MORE_SETTINGS.map((m) => (
-            <div>
-              <dt>{m.name}</dt>
-              <dd>{m.text}</dd>
-            </div>
+          WEAPONS.map((w) => (
+            <li class="panel">
+              <div class="weapons__hero">
+                <Sprite id={w.hero} scale={2} />
+                <h3>{heroName(w.hero)}</h3>
+              </div>
+              <ul class="chips">
+                {w.weapons.map((name) => (
+                  <li>{name}</li>
+                ))}
+              </ul>
+            </li>
           ))
         }
-      </dl>
+      </ul>
     </section>
 
     <section aria-labelledby="cheats">
       <h2 id="cheats">Cheats</h2>
       <p>
-        The original's cheats, in <strong>Options → Cheats</strong>, all off by default and for Classic rules only. A
-        locked cheat shows as <strong>?????</strong>: select it to see its goal. The original's secret code unlocks them all.
+        The original's cheats, in <strong>Options → Cheats</strong>, all off by default. A locked cheat shows as{' '}
+        <strong>?????</strong>: select it to see its goal.
       </p>
       <div class="table-wrap panel">
         <table>
@@ -128,27 +121,9 @@ import { url } from '../lib';
         </table>
       </div>
       <p>
-        <strong>Level Select</strong> unlocks once you beat all three map sets (Super Mario Bros., The Lost Levels and
-        SMB Special) on Hard. It appears on the Cheats page and in the pause menu: pick a map set, a difficulty, a world
-        and a level. A run started from Level Select or from a shared level link (such as <code>?level=sp-1-1</code> for
-        SMB Special) counts toward the cheats' goals and a map set's BEATEN mark.
-      </p>
-    </section>
-
-    <section aria-labelledby="music">
-      <h2 id="music">Music set</h2>
-      <p>
-        <strong>Options → Music set</strong>: <strong>Character</strong> (the default, as in the original) plays each
-        hero's own music, <strong>Map</strong> plays the Super Mario Bros. music for everyone, and <strong>Random</strong>{' '}
-        picks one of the two for each area. All of the music is our own.
-      </p>
-    </section>
-
-    <section aria-labelledby="chapter">
-      <h2 id="chapter">Chapter 1</h2>
-      <p>
-        Chapter 1, our story campaign, is on the title screen too, but it is coming soon (planned for version 1.0). Its
-        card says so, and any save files you already have are kept.
+        <strong>Level Select</strong> unlocks once you beat all three map sets on Hard: pick a map set, a difficulty, a
+        world and a level. Runs from Level Select or a shared level link (such as <code>?level=sp-1-1</code>) count
+        toward the cheats' goals too.
       </p>
     </section>
 
@@ -167,6 +142,29 @@ import { url } from '../lib';
     margin-top: 0;
     color: var(--gold);
   }
+  .difficulties {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  }
+  .difficulties figure {
+    margin: 0;
+    padding: 0.75rem;
+  }
+  .difficulties video {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--black);
+    image-rendering: pixelated;
+  }
+  .difficulties figcaption {
+    font-family: var(--font-pixel);
+    font-size: 0.8rem;
+    color: var(--gold);
+    text-align: center;
+    margin-top: 0.6rem;
+  }
   .defs > div + div {
     margin-top: 0.85rem;
   }
@@ -176,4 +174,57 @@ import { url } from '../lib';
   .defs dd {
     margin: 0.2rem 0 0;
   }
+  .weapons {
+    list-style: none;
+    padding: 0;
+  }
+  .weapons__hero {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    min-height: 68px;
+  }
+  .weapons__hero h3 {
+    margin: 0;
+  }
+  .chips {
+    list-style: none;
+    padding: 0;
+    margin: 0.85rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .chips li {
+    padding: 0.15rem 0.5rem;
+    border: 2px solid var(--panel-edge);
+    font-size: 0.9rem;
+  }
+  .chips li:first-child {
+    border-color: var(--gold);
+  }
 </style>
+
+<script>
+  // The three difficulty clips play together, so they stay in step (not under reduced motion).
+  const clips = [...document.querySelectorAll<HTMLVideoElement>('[data-difficulty-clip]')];
+  if (clips.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const start = () => {
+      for (const v of clips) {
+        v.currentTime = 0;
+        void v.play().catch(() => {});
+      }
+    };
+    const box = clips[0]?.closest('.difficulties');
+    // Start them when they come into view, so all three begin at the start of the run.
+    if (box && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          start();
+        }
+      });
+      io.observe(box);
+    } else start();
+  }
+</script>

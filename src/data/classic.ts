@@ -426,36 +426,14 @@ export const EXPANSION_HEROES: ExpansionHero[] = [
 ];
 
 export const MAP_SETS: { name: string; text: string; later?: boolean }[] = [
-  { name: 'Super Mario Bros.', text: 'Worlds 1-1 to 8-4. 8-4 ends with the credits.' },
-  {
-    name: 'The Lost Levels',
-    text: 'Thirteen worlds, played straight through from 1-1 to D-4 as in the original: 8-4 goes on to World 9 whatever warps you used, 9-4 to World A, and D-4 rolls the credits. Start it from the Classic menu.',
-  },
-  {
-    name: 'SMB Special',
-    text: '32 new levels (Worlds 1-1 to 8-4), built for each hero and each difficulty, ending with the credits as Super Mario Bros. does. New enemies that can’t be stomped: Icicles that drop when you come near, Crabs that get angry when hit, hopping Flies, rolling armoured Barrels and living Flames that only a Star or the Hammer puts out (a few on Easy and Normal, many more on Hard). New items in blocks: the Atom defeats every enemy on screen, the Hammer swings around you for ten seconds, and the Wing lets you swim through the air for ten seconds. Plus a full power-up, and numbered vines to bonus rooms.',
-  },
+  { name: 'Super Mario Bros.', text: 'Play the original Super Mario Bros. levels, from World 1-1 to 8-4.' },
+  { name: 'The Lost Levels', text: 'Play the original Lost Levels, straight through from World 1-1 to D-4.' },
+  { name: 'SMB Special', text: 'Play the 32 levels of Super Mario Bros. Special, with their own enemies and items.' },
 ];
 
 export const DIFFICULTY: Note[] = [
-  { text: 'Each difficulty plays the original’s own version of every level, with other enemies and blocks.' },
-  { text: 'Easy and Hard give the castles their checkpoints, and add the original’s Clocks and Atoms to Super Mario Bros. and The Lost Levels.' },
   {
-    text: 'On Hard, Lakitu comes back sooner and keeps more Spinies out at once, more flying Cheep Cheeps leap at a time, and a hidden Hudson Bee can be found. Easy is the reverse. Special’s new enemies turn up in Super Mario Bros. and The Lost Levels on Hard too.',
-  },
-  { text: 'A beaten map set remembers the difficulty it was beaten on.' },
-];
-
-/** The Classic menu and other options. */
-export const CLASSIC_MENU: Note[] = [
-  {
-    text: 'Continue, at the top of the Classic menu, picks your last run up at the start of the level you reached, with its lives, score, coins, hero and power (Survival’s fallen heroes too). A game over or the credits end it.',
-  },
-  {
-    text: 'Options → Disable heroes, the original’s Disable characters: a hero turned off leaves the select, Random and Single random. One hero always stays on.',
-  },
-  {
-    text: 'The pause menu has a Guide row for the hero you’re playing, and a Cheats row that turns unlocked cheats on or off mid-run (Water Mode floods the level at once).',
+    text: 'Every map set plays at Easy, Normal or Hard, each the original’s own version of every level: Easy adds coins and blocks, Hard adds enemies, pits and hazards.',
   },
 ];
 
@@ -469,29 +447,27 @@ export const GAME_MODES: { name: string; text: string }[] = [
   { name: 'Single random', text: 'No select: the game picks your hero for every level and life.' },
 ];
 
-export const WEAPONS: { row: string; choices: string }[] = [
+/**
+ * Each hero's weapons in Classic mode: the power-up weapons Options → Weapons picks from (the
+ * original's Customize Weapons), the default first. Mario and Luigi have their fireballs only.
+ */
+export const WEAPONS: { hero: string; weapons: string[] }[] = [
+  { hero: 'mario', weapons: ['Fireballs'] },
+  { hero: 'luigi', weapons: ['Fireballs'] },
+  { hero: 'link', weapons: ['Bomb', 'Bow and Arrow'] },
+  { hero: 'samus', weapons: ['Wave Beam', 'Ice Beam'] },
+  { hero: 'simon', weapons: ['Axe', 'Cross', 'Dagger', 'Holy Water', 'Stopwatch'] },
   {
-    row: 'Bass (Flower)',
-    choices: 'Water Shield; Super Arm, Metal Blade, Hard Knuckle, Pharaoh Shot, Charge Kick, Flame Blast, Magma Bazooka, Screw Crusher',
+    hero: 'megaman',
+    weapons: ['Metal Blade', 'Water Shield', 'Super Arm', 'Hard Knuckle', 'Pharaoh Shot', 'Charge Kick', 'Flame Blast', 'Magma Bazooka', 'Screw Crusher'],
   },
-  { row: 'Bill gun 1 (Mushroom)', choices: 'Machine Gun; Flare, Laser' },
-  { row: 'Bill gun 2 (Flower)', choices: 'Spread; Flare, Laser, Machine Gun (never the same as gun 1)' },
-  { row: 'Link (Mushroom)', choices: 'Bomb; Bow and Arrow' },
-  { row: 'Mega Man (Flower)', choices: 'Metal Blade; the other eight of the Bass list, Water Shield included' },
-  { row: 'Ryu start / extra', choices: 'Shuriken / Windmill; also Jump Slash, Fire Wheel, Dragon Ball (never the same twice)' },
-  { row: 'Samus (Flower beam)', choices: 'Wave Beam; Ice Beam' },
-  { row: 'Simon start / extra', choices: 'Axe / Cross; also Dagger, Holy Water, Stopwatch (never the same twice)' },
-  { row: 'Sophia III (missile)', choices: 'Triple Missile; Homing Missile' },
-];
-
-export const MORE_SETTINGS: { name: string; text: string }[] = [
-  { name: 'Lives', text: 'How many lives you start with and get after each continue: 1, 3, 5, 7 or 10 (default 3).' },
-  { name: 'Attack', text: 'Every hero’s attack strength, from Very weak to Very strong.' },
-  { name: 'When hit', text: 'Lose everything (default; any hit leaves you small), Previous state (a hit takes one power-up) or Instant death.' },
-  { name: 'Item drops', text: 'How often enemies and blocks drop ammo, from Very low to Very high.' },
-  { name: 'Piranhas', text: 'Which pipes have Piranha Plants, and their colour.' },
-  { name: 'Goombas', text: 'Every Goomba becomes this enemy: Off, Buzzy Beetle, Spiny or Spike Top (our own spiked crawler, which can’t be stomped).' },
-  { name: 'Enemy speed', text: 'Normal, or Fast for walking enemies.' },
+  {
+    hero: 'bass',
+    weapons: ['Water Shield', 'Super Arm', 'Metal Blade', 'Hard Knuckle', 'Pharaoh Shot', 'Charge Kick', 'Flame Blast', 'Magma Bazooka', 'Screw Crusher'],
+  },
+  { hero: 'bill', weapons: ['Machine Gun', 'Spread', 'Flare', 'Laser'] },
+  { hero: 'ryu', weapons: ['Shuriken', 'Windmill', 'Jump Slash', 'Fire Wheel', 'Dragon Ball'] },
+  { hero: 'sophia', weapons: ['Triple Missile', 'Homing Missile'] },
 ];
 
 export const CHEATS: { name: string; does: string; unlock: string; later?: boolean }[] = [

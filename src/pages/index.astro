@@ -8,40 +8,7 @@ import { url, media } from '../lib';
 
 // Version 0.5.0 is Classic mode: a true remake of Super Mario Bros. Crossover 3.1.21. The story
 // campaign's home page waits in src/campaign for the 1.0 release.
-const features = [
-  {
-    icon: 'star',
-    title: 'The original ten heroes',
-    text: 'Mario, Luigi, Link, Samus, Simon, Mega Man, Bass, Bill, Ryu and Sophia III, plus Random, each with the moves of their own game.',
-  },
-  {
-    icon: 'heart',
-    title: 'Looks that play differently',
-    text: 'Each hero’s alternate looks, as in the original, and many of them play their own way.',
-  },
-  {
-    icon: 'qblock',
-    title: 'Three map sets',
-    text: 'Super Mario Bros., The Lost Levels played straight through from 1-1 to D-4, and the Special maps.',
-  },
-  {
-    icon: 'coin',
-    title: 'Easy, Normal or Hard',
-    text: 'Every map set at three difficulties, with the original’s options: More settings, Weapons, Cheats, Survival and per-hero music.',
-  },
-  {
-    icon: 'star',
-    title: 'Plays everywhere',
-    text: 'Keyboard, gamepad or touch, with remappable controls and accessibility options. Free, in your browser.',
-  },
-] as const;
 
-const roadmap = [
-  { version: '0.5.0', title: 'Classic mode', text: 'The first full release: the remake of the original, with our own art and music.' },
-  { version: '0.5.x', title: 'More looks', text: 'About 60 more of the original’s cosmetic looks.' },
-  { version: '0.6 – 0.9', title: 'New heroes', text: 'More heroes join the roster.' },
-  { version: '1.0', title: 'Chapter 1', text: 'The story campaign.' },
-];
 ---
 
 {
@@ -95,38 +62,11 @@ const roadmap = [
           </p>
         </section>
 
-        <section aria-labelledby="features-title">
-          <h2 id="features-title">What's in {GAME.launchVersion}</h2>
-          <ul class="grid features">
-            {features.map((f) => (
-              <li class="panel feature">
-                <PixelArt name={f.icon} scale={3} />
-                <h3>{f.title}</h3>
-                <p>{f.text}</p>
-              </li>
-            ))}
-          </ul>
-          <p>
-            <a href={url('heroes/')}>Meet the heroes</a>, explore the <a href={url('modes/')}>maps and modes</a>, or{' '}
-            <a href={url('how-to-play/')}>see how to play</a>.
-          </p>
-        </section>
-
-        <section aria-labelledby="roadmap-title">
-          <h2 id="roadmap-title">What's next</h2>
-          <ol class="roadmap">
-            {roadmap.map((r) => (
-              <li class="panel">
-                <p class="tag">{r.version}</p>
-                <h3>{r.title}</h3>
-                <p>{r.text}</p>
-              </li>
-            ))}
-          </ol>
-          <p>
-            Every major and minor release so far is <a href={url('versions/')}>playable on this site</a>.
-          </p>
-        </section>
+        <p>
+          <a href={url('heroes/')}>Meet the heroes</a>, explore the <a href={url('modes/')}>maps and modes</a>,{' '}
+          <a href={url('how-to-play/')}>see how to play</a>, or read <a href={url('about/#version')}>what's in{' '}
+          {GAME.launchVersion} and what's next</a>.
+        </p>
 
         <section class="home-release">
           <LatestRelease />
@@ -181,24 +121,6 @@ const roadmap = [
   }
   .status {
     margin-top: 2.5rem;
-  }
-  .features,
-  .roadmap {
-    list-style: none;
-    padding: 0;
-  }
-  .feature h3,
-  .roadmap h3 {
-    margin: 0.75rem 0 0.5rem;
-    color: var(--gold);
-  }
-  .roadmap {
-    display: grid;
-    gap: 1.25rem;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
-  }
-  .roadmap p:last-child {
-    margin-bottom: 0;
   }
   .home-release,
   .join {
