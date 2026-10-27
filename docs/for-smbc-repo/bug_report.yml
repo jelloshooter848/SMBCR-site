@@ -14,8 +14,8 @@ body:
     id: version
     attributes:
       label: Build / version
-      description: The title screen shows it in the bottom-right corner, for example V0.5.0 (or V0.5.0-DEV.abc1234 on a test build).
-      placeholder: V0.5.0 (or V0.4.65 on a test build)
+      description: Options → About on the title screen shows it, for example VERSION 0.5.0.
+      placeholder: 0.5.0
     validations:
       required: true
   - type: dropdown
@@ -51,10 +51,12 @@ body:
     attributes:
       label: How were you playing?
       options:
-        - Classic, Classic rules
-        - Classic, Current rules
-        - Level Select or a ?level= link
+        - Classic, a save file's run
+        - Classic, replaying a level from a cleared file
+        - A ?level= link
         - A custom or shared level
+        - Online backup or Save data
+        - Music Lab
         - Other
     validations:
       required: false
