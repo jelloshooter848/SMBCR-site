@@ -34,7 +34,7 @@ what the changelog doesn't spell out.
 
 | Site content | Site file | Game source to compare |
 | --- | --- | --- |
-| Classic heroes, looks, Expansion heroes, maps, modes, cheats, accessibility | `src/data/classic.ts` | Each hero's Classic guide (`src/game/characters/<id>/classic-guide.ts`; Bill's in `bill/classic.ts`) and the Classic options |
+| Classic heroes, looks, maps, modes, cheats, accessibility | `src/data/classic.ts` | Each hero's Classic guide (`src/game/characters/<id>/classic-guide.ts`; Bill's in `bill/classic.ts`) and the Classic options |
 | Campaign hero moves, power-ups, tool belts, tips, taglines (hidden until 1.0) | `src/data/roster.ts` (`HEROES`) | `src/game/characters/<id>/guide.ts` (Mario and Luigi: `mario/guide.ts`, with taglines in `mario/index.ts` and `luigi/index.ts`) |
 | Hero list and order, new heroes | `src/data/roster.ts` (`HEROES`) | `src/game/characters/registry.ts` |
 | Where each hero hides, home world | `src/data/roster.ts` (`hiddenIn`, `world`) | `docs/STORY.md` ("Who is where"), `docs/HEROES.md` |

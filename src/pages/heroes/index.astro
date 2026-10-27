@@ -1,13 +1,13 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
-import { CLASSIC_HEROES, EXPANSION_HEROES, HERO_RULES, RANDOM, shown } from '../../data/classic';
+import { CLASSIC_HEROES, HERO_RULES, RANDOM, shown } from '../../data/classic';
 import { url } from '../../lib';
 
 const lookCount = (id: string) => shown(CLASSIC_HEROES.find((h) => h.id === id)?.looks ?? []).length;
 ---
 
-<Base title="Heroes" description="The heroes of Super Mario Bros. Crossover: REMIX Classic mode: their moves, power-ups and looks, plus the optional Expansion heroes.">
+<Base title="Heroes" description="The heroes of Super Mario Bros. Crossover: REMIX Classic mode: their moves, power-ups and looks.">
   <PageBanner
     title="Heroes"
     intro="The original's ten heroes and a Random pick, each playing Super Mario Bros. with the moves of their own game."
@@ -42,28 +42,6 @@ const lookCount = (id: string) => shown(CLASSIC_HEROES.find((h) => h.id === id)?
       </ul>
     </section>
 
-    <section aria-labelledby="expansion-title" class="expansion">
-      <h2 id="expansion-title">Expansion heroes</h2>
-      <p>
-        <strong>Options → Expansion heroes</strong> is off by default, so the select is the original's. Turn it on and four
-        heroes the original never had join the select, after the original heroes and before Random, all with our own art.
-      </p>
-      <div class="grid">
-        {
-          EXPANSION_HEROES.map((h) => (
-            <section class="panel" aria-labelledby={`x-${h.name.replace(/\W+/g, '-')}`}>
-              <h3 id={`x-${h.name.replace(/\W+/g, '-')}`}>{h.name}</h3>
-              <p class="meta">{h.tagline}.</p>
-              <ul>
-                {h.points.map((p) => (
-                  <li>{p}</li>
-                ))}
-              </ul>
-            </section>
-          ))
-        }
-      </div>
-    </section>
   </div>
 </Base>
 
@@ -78,8 +56,7 @@ const lookCount = (id: string) => shown(CLASSIC_HEROES.find((h) => h.id === id)?
   .roster .card {
     border-color: var(--accent, var(--panel-edge));
   }
-  .roster h3,
-  .expansion h3 {
+  .roster h3 {
     margin: 0 0 0.5rem;
   }
   .roster h3 a {
@@ -94,12 +71,5 @@ const lookCount = (id: string) => shown(CLASSIC_HEROES.find((h) => h.id === id)?
   }
   .meta {
     color: var(--muted);
-  }
-  .expansion ul {
-    padding-left: 1.2rem;
-    margin: 0;
-  }
-  .expansion li {
-    margin-bottom: 0.4rem;
   }
 </style>

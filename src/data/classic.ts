@@ -1,5 +1,5 @@
 /**
- * Classic mode (game 0.5.0): the heroes, looks, Expansion heroes, maps, modes and options the
+ * Classic mode (game 0.5.0): the heroes, looks, maps, modes and options the
  * Classic pages show. Compiled from the game's own code (its Classic guides and options) for 0.5.0;
  * the campaign's heroes are in roster.ts.
  *
@@ -340,6 +340,7 @@ export const HERO_RULES: Note[] = [
   },
 ];
 
+/** Not in 0.5.0, so not on the site; kept for the release that adds them. */
 export interface ExpansionHero {
   name: string;
   tagline: string;
