@@ -8,7 +8,7 @@ The site's content was written against this version of the game:
 | **Commit** | `c87e8694fe612bcda633eab30c76bc16bc15c259` (SMBC `main`, 2026-10-08 14:23 -07:00) |
 | **Media in `campaign/media`** | Captured from a local production build of that same commit (see `campaign/media/CAPTURED.txt`) |
 | **Site written** | 2026-10-08 (PR #1) |
-| **Classic pages** (`src/data/classic.ts`) | Compiled 2026-10-20 from the game's Classic guides and options for 0.5.0, as of the v0.4.65 test build (game branch `claude/admiring-galileo-quy3ri`, commit `e1f750c`); updated for v0.4.66 (game PR #179) and v0.4.67 (game PR #181, SMB Special) on 2026-10-21. Nothing is marked `later: true` now |
+| **Classic pages** (`src/data/classic.ts`, Maps & modes, How to play) | Compiled 2026-10-20 from the game's Classic guides and options, updated for v0.4.66 and v0.4.67, and checked against **v0.5.0** (tag `v0.5.0`, commit `88b9002`) on 2026-10-27: save files per map set, cleared-file replays and Advanced cheats in place of Level Select. Next comparison: `git log v0.5.0..` in the game repo. Classic clips and sprites in `public/media/classic` were captured from the v0.4.77 work and are kept for 0.5.0 (owner decision) |
 
 The site launches for **Chapter 1, v0.5.0**, which wasn't released yet. When v0.5.0 (or any later release) comes out,
 compare it with v0.4.32 as below and update the site. Then update the table above to the new version, so the next
