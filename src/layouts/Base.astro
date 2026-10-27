@@ -79,7 +79,7 @@ const isCurrent = (href: string) => (href === url('') ? path === href : path.sta
               ))
             }
             <li>
-              <a class="nav-play" href={url('play/')} aria-current={path.startsWith(url('play/')) ? 'page' : undefined}>
+              <a class="nav-play" href={GAME.playUrl}>
                 ▶ Play
               </a>
             </li>
@@ -97,7 +97,8 @@ const isCurrent = (href: string) => (href === url('') ? path === href : path.sta
       <div class="wrap">
         <nav aria-label="Footer">
           <ul>
-            <li><a href={url('play/')}>Play</a></li>
+            <li><a href={GAME.playUrl}>Play</a></li>
+            <li><a href={url('play/')}>Play in this site's page</a></li>
             <li><a href={url('versions/')}>Older versions</a></li>
             <li><a href={GAME.releasesUrl}>Releases</a></li>
             <li><a href={url('community/')}>Community and bug reports</a></li>

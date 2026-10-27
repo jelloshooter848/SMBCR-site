@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageBanner from '../components/PageBanner.astro';
+import { GAME } from '../config';
 import { url } from '../lib';
 ---
 
@@ -8,7 +9,7 @@ import { url } from '../lib';
   <PageBanner title="Thank you, but this page is in another castle" intro="That address doesn't lead anywhere. Try one of these instead." />
   <div class="wrap">
     <div class="btn-row">
-      <a class="btn btn--red" href={url('play/')}>▶ Play</a>
+      <a class="btn btn--red" href={GAME.playUrl}>▶ Play</a>
       <a class="btn btn--blue" href={url('')}>Home</a>
       <a class="btn btn--blue" href={url('heroes/')}>Heroes</a>
       <a class="btn btn--blue" href={url('news/')}>News</a>

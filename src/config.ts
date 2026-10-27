@@ -24,7 +24,7 @@ export const SITE = {
 
 export const GAME = {
   repo: GAME_REPO,
-  /** The live game (GitHub Pages of the game repo). Embedded on /play and opened full screen. */
+  /** The live game (GitHub Pages of the game repo). Every Play button opens it full screen (so phones can add it to the Home Screen); /play can also embed it. */
   playUrl: 'https://jelloshooter848.github.io/SMBC/',
   repoUrl: `https://github.com/${GAME_REPO}`,
   releasesUrl: `https://github.com/${GAME_REPO}/releases`,
