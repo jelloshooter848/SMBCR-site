@@ -1,8 +1,9 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PageBanner from '../../components/PageBanner.astro';
-import { CLASSIC_HEROES, shown, type ClassicHero } from '../../data/classic';
-import { url } from '../../lib';
+import Sprite from '../../components/Sprite.astro';
+import { CLASSIC_HEROES, clipLevelName, lookSprites, shown, type ClassicHero } from '../../data/classic';
+import { media, url } from '../../lib';
 
 export function getStaticPaths() {
   return CLASSIC_HEROES.map((hero) => ({ params: { id: hero.id }, props: { hero } }));
@@ -22,6 +23,14 @@ const notes = shown(hero.notes ?? []);
 <Base title={hero.name} description={`${hero.name} in Super Mario Bros. Crossover: REMIX Classic mode: ${hero.tagline.toLowerCase()}. Moves, power-ups and looks.`}>
   <PageBanner title={hero.name} intro={`${hero.tagline}.`} />
   <div class="wrap">
+    <figure class="clip">
+      <video width="512" height="480" muted loop playsinline controls preload="none" poster={media(`classic/hero-${hero.id}.png`)}>
+        <source src={media(`classic/hero-${hero.id}.webm`)} type="video/webm" />
+        <source src={media(`classic/hero-${hero.id}.mp4`)} type="video/mp4" />
+      </video>
+      <figcaption>{hero.name} playing {clipLevelName(hero)}.</figcaption>
+    </figure>
+
     <section aria-labelledby="guide">
       <h2 id="guide">How {hero.name} plays</h2>
       <dl class="panel guide" style={`--accent: ${hero.color}`}>
@@ -48,14 +57,24 @@ const notes = shown(hero.notes ?? []);
             <ul class="looks">
               {looks.map((l) => (
                 <li>
-                  <strong>{l.name}</strong>
-                  {l.note && <>: {l.note}</>}
+                  <span class="looks__art">
+                    {lookSprites(hero, l).map((sp) => (
+                      <Sprite id={sp.id} scale={2} alt={sp.name === l.name ? '' : sp.name} />
+                    ))}
+                  </span>
+                  <span>
+                    <strong>{l.name}</strong>
+                    {l.note && <>: {l.note}</>}
+                  </span>
                 </li>
               ))}
             </ul>
           </>
         ) : (
-          <p>{hero.name} has one look.</p>
+          <p class="one-look">
+            <Sprite id={hero.id} scale={2} />
+            <span>{hero.name} has one look.</span>
+          </p>
         )
       }
       {
@@ -97,8 +116,42 @@ const notes = shown(hero.notes ?? []);
   .guide dd {
     margin: 0.35rem 0 0;
   }
-  .looks li {
-    margin-bottom: 0.5rem;
+  .clip {
+    margin: 2rem 0 0;
+    max-width: 512px;
+  }
+  .clip video {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--black);
+    image-rendering: pixelated;
+  }
+  .clip figcaption {
+    margin-top: 0.4rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+  .looks {
+    list-style: none;
+    padding: 0;
+  }
+  .looks li,
+  .one-look {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  /* Room for the tallest look (34 px at 2x), so the names line up. */
+  .looks__art {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 0.25rem;
+    flex: none;
+    min-width: 5.5rem;
+    min-height: 68px;
   }
   .pager {
     display: flex;

@@ -45,3 +45,23 @@ Which level each hero plays is `capture` in `src/data/roster.ts`. A new hero the
 
 If the game's menus change and the walk gets lost, the error says which screen it was waiting for. The clips are
 best captured from a release build, so the title screen shows a release version.
+
+## Classic mode: the Heroes page's sprites and clips
+
+Two more tools make the Classic media in `public/media/classic`, also straight from the game:
+
+| File                                      | What it is                                                         | Made by                  |
+| ----------------------------------------- | ------------------------------------------------------------------ | ------------------------ |
+| `sprites/<id>.png`                        | Every hero's and look's hero-select art, at the game's own size    | `classic-sprites.mjs`    |
+| `hero-<id>.webm`, `.mp4`, `.png`          | A 6-second Classic clip of each hero, and a still from it          | `classic-clips.mjs`      |
+
+```sh
+# Sprites: they are drawn in code, so this reads them from the game's Vite dev server (pnpm dev in the game repo).
+npm run capture:sprites -- --url http://localhost:5173/
+# Clips: each hero starts a Classic run from a level link (?level=1-1&char=link) and plays a few seconds.
+npm run capture:classic                                   # from the live game
+npm run capture:classic -- --only ryu,bill --url http://localhost:5173/
+```
+
+A hero's clip level is `clipLevel` in `src/data/classic.ts` (1-1 if unset), and a look's sprite ids are its
+`sprites`. Look at the new clips before committing: the play pattern is the same simple run, jump and attack as above.

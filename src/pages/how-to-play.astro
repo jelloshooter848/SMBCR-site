@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageBanner from '../components/PageBanner.astro';
-import { ACCESSIBILITY } from '../data/classic';
+import { ACCESSIBILITY, HERO_RULES, shown } from '../data/classic';
 import { GAME } from '../config';
 import { url } from '../lib';
 
@@ -32,6 +32,14 @@ const abilities = [
       <p>
         Sound starts on your first press or tap. The game saves your settings and progress in your browser.
       </p>
+    </section>
+
+    <section aria-labelledby="heroes">
+      <h2 id="heroes">Choosing a hero</h2>
+      <ul>
+        {shown(HERO_RULES).map((r) => <li>{r.text}</li>)}
+      </ul>
+      <p><a href={url('heroes/')}>Meet the heroes</a> and watch each one play.</p>
     </section>
 
     <section aria-labelledby="abilities">
