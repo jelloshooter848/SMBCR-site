@@ -14,10 +14,14 @@ const heroName = (id: string) => CLASSIC_HEROES.find((h) => h.id === id)?.name ?
 ---
 
 <Base title="Maps & modes" description="The map sets, difficulties, game modes, weapons and cheats of Super Mario Bros. Crossover: REMIX Classic mode.">
-  <PageBanner title="Maps & modes" intro="Pick Classic on the title screen, then a map set and a difficulty." />
+  <PageBanner title="Maps & modes" intro="Pick Classic on the title screen, then a map set and one of its save files." />
   <div class="wrap page">
     <section aria-labelledby="sets">
       <h2 id="sets">Map sets</h2>
+      <p>
+        Each map set has three save files. A new file asks its difficulty and its rules (game mode, weapons, More
+        settings and which heroes are on), and keeps them for good; a used file carries on where you left it.
+      </p>
       <div class="grid">
         {
           shown(MAP_SETS).map((m) => (
@@ -75,7 +79,7 @@ const heroName = (id: string) => CLASSIC_HEROES.find((h) => h.id === id)?.name ?
 
     <section aria-labelledby="weapons">
       <h2 id="weapons">Weapons</h2>
-      <p>Each hero's weapons. Pick one in <strong>Options → Weapons</strong>; the first is the original's.</p>
+      <p>Each hero's weapons. Pick one in a new save file's <strong>Weapons</strong>; the first is the original's.</p>
       <ul class="grid weapons">
         {
           WEAPONS.map((w) => (
@@ -121,9 +125,10 @@ const heroName = (id: string) => CLASSIC_HEROES.find((h) => h.id === id)?.name ?
         </table>
       </div>
       <p>
-        <strong>Level Select</strong> unlocks once you beat all three map sets on Hard: pick a map set, a difficulty, a
-        world and a level. Runs from Level Select or a shared level link (such as <code>?level=sp-1-1</code>) count
-        toward the cheats' goals too.
+        Beat a map set and its file stays <strong>CLEARED</strong>: pick it to replay any level of that set with the
+        file's rules and unlimited lives. Beat it on Hard and that file also unlocks <strong>Advanced cheats</strong> for its
+        replays: no damage, a safety floor, show hidden items, slow motion and more. A run from a shared level link (such
+        as <code>?level=sp-1-1</code>) counts toward the cheats' goals too.
       </p>
     </section>
 

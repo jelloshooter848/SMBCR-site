@@ -23,10 +23,15 @@ const abilities = [
       <ol>
         <li><a href={GAME.playUrl}>Open the game</a> (or <a href={url('play/')}>play it in this site's page</a>).</li>
         <li>On the title screen, pick <strong>Classic</strong>.</li>
-        <li>Pick a map set, then a hero. Each hero plays their own way: <a href={url('heroes/')}>see how</a>.</li>
         <li>
-          In a level, <strong>Pause</strong> opens the menu, where <strong>Guide</strong> shows the moves of the hero you're
-          playing. <strong>Options → How to play</strong> on the title screen has every Classic hero's guide.
+          Pick a map set, then one of its three save files. A new file asks its difficulty and its rules (game mode,
+          weapons and more); a used one carries on where you left it.
+        </li>
+        <li>Pick a hero. Each hero plays their own way: <a href={url('heroes/')}>see how</a>.</li>
+        <li>
+          In a level, <strong>Pause</strong> opens the menu, where <strong>Guide</strong> shows the original's tips for the
+          hero you're playing. Classic mode's <strong>Options → How to play</strong> has every Classic hero's guide, and{' '}
+          <strong>Tutorials</strong> turns on the original's help boxes as you play.
         </li>
       </ol>
       <p>
@@ -90,8 +95,9 @@ const abilities = [
         }
       </dl>
       <p>
-        Unlocked cheats (Invincible, Infinite Lives, Infinite Time, Extra Checkpoints, Level Select) and More settings
-        (Lives, When hit) can make the game easier: see <a href={url('modes/')}>Maps &amp; modes</a>.
+        Unlocked cheats (Invincible, Infinite Lives, Infinite Time, Extra Checkpoints), a cleared file's Advanced cheats
+        and a new file's More settings (Lives, When hit) can make the game easier: see{' '}
+        <a href={url('modes/')}>Maps &amp; modes</a>.
       </p>
       <p>
         The rules the game follows for every screen, card and menu are written down in its{' '}
